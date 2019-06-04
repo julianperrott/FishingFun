@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System;
+using System.Linq;
 
 namespace FishingFun
 {
@@ -20,11 +17,11 @@ namespace FishingFun
         {
             get
             {
-                return (int)( pixelClassifier.ColourMultiplier*100);
+                return (int)(pixelClassifier.ColourMultiplier * 100);
             }
             set
             {
-                pixelClassifier.ColourMultiplier = ((double)value)/100;
+                pixelClassifier.ColourMultiplier = ((double)value) / 100;
             }
         }
 
@@ -39,7 +36,6 @@ namespace FishingFun
                 pixelClassifier.ColourClosenessMultiplier = ((double)value) / 100;
             }
         }
-
 
         public ColourConfiguration(IPixelClassifier pixelClassifier)
         {
@@ -61,7 +57,6 @@ namespace FishingFun
             {
                 for (var g = 0; g < 256; g++)
                 {
-
                     if (pixelClassifier.IsMatch((byte)this.RedValue, (byte)g, (byte)b))
                     {
                         points.Add(new Point(b, g));
@@ -70,19 +65,16 @@ namespace FishingFun
                 }
             }
 
-
-            if (ScreenCapture==null)
+            if (ScreenCapture == null)
             {
                 ScreenCapture = WowScreen.GetBitmap();
             }
 
-            this.ColourDisplay.Source = ToBitmapImage(bitmap);
-            this.WowScreenshot.Source = ToBitmapImage(ScreenCapture);
-
+            this.ColourDisplay.Source = bitmap.ToBitmapImage();
+            this.WowScreenshot.Source = ScreenCapture.ToBitmapImage();
 
             if (rendedMatchedArea)
             {
-
                 System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     foreach (var point in points)
@@ -94,9 +86,8 @@ namespace FishingFun
                             bitmap.SetPixel(point.X, point.Y, Color.White);
                         }
                     }
-                    this.ColourDisplay.Source = ToBitmapImage(bitmap);
+                    this.ColourDisplay.Source = bitmap.ToBitmapImage();
                 }));
-
 
                 System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
                 {
@@ -113,27 +104,8 @@ namespace FishingFun
                             }
                         }
                     }
-                    this.WowScreenshot.Source = ToBitmapImage(bmp);
+                    this.WowScreenshot.Source = bmp.ToBitmapImage();
                 }));
-            }
-        }
-
-        public static BitmapImage ToBitmapImage(System.Drawing.Bitmap bitmap)
-        {
-            using (var memory = new MemoryStream())
-            {
-                bitmap.Save(memory, ImageFormat.Png);
-                memory.Position = 0;
-
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-
-                memory.Dispose();
-                return bitmapImage;
             }
         }
 
@@ -142,7 +114,6 @@ namespace FishingFun
             this.LabelRed.Content = $"Red: {this.RedValue}";
             RenderColour(false);
         }
-
 
         private void ColourMultiplier_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
@@ -153,7 +124,6 @@ namespace FishingFun
         {
             this.LabelColourClosenessMultiplier.Content = $"Colour Closeness: {this.pixelClassifier.ColourClosenessMultiplier}";
         }
-        
 
         private void Slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {

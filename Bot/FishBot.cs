@@ -70,12 +70,9 @@ namespace FishingFun
 
             this.biteWatcher.Reset(bobberPosition);
 
-            // reposition mouse to indicate where the bobber is close to
-            //System.Windows.Forms.Cursor.Position = new Point(bobberPosition.X, bobberPosition.Y + 50);
-
             logger.Info("Bobber start position: " + bobberPosition);
 
-            var timedTask = new TimedAction((a) => { logger.Info("Fishing timed out!"); }, 25*1000, 25);
+            var timedTask = new TimedAction((a) => { logger.Info("Fishing timed out!"); }, 25 * 1000, 25);
 
             // Wait for the bobber to move
             while (true)

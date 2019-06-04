@@ -1,25 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using LiveCharts;
+using LiveCharts.Configurations;
 using System;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using LiveCharts;
-using LiveCharts.Configurations;
 
 namespace FishingFun
 {
@@ -47,7 +30,7 @@ namespace FishingFun
             //that LiveCharts learns to plot MeasureModel and will use this config every time
             //a IChartValues instance uses this type.
             //this code ideally should only run once
-            //you can configure series in many ways, learn more at 
+            //you can configure series in many ways, learn more at
             //http://lvcharts.net/App/examples/v1/wpf/Types%20and%20Configuration
 
             var mapper = Mappers.Xy<MeasureModel>()
@@ -59,6 +42,7 @@ namespace FishingFun
 
             //the values property will store our values array
             ChartValues = new ChartValues<MeasureModel>();
+            ChartValues2 = new ChartValues<MeasureModel>();
 
             //lets set how to display the X Labels
             DateTimeFormatter = value => "";
@@ -84,13 +68,23 @@ namespace FishingFun
                 Value = value
             });
 
-            SetAxisLimits(now);
+            ChartValues2.Add(new MeasureModel
+            {
+                DateTime = now,
+                Value = -7
+            });
 
-            //lets only use the last 150 values
-            if (ChartValues.Count > 1500) ChartValues.RemoveAt(0);
+            SetAxisLimits(now);
+        }
+
+        public void ClearChart()
+        {
+            this.ChartValues.Clear();
+            this.ChartValues2.Clear();
         }
 
         public ChartValues<MeasureModel> ChartValues { get; set; }
+        public ChartValues<MeasureModel> ChartValues2 { get; set; }
         public Func<double, string> DateTimeFormatter { get; set; }
         public double AxisStep { get; set; }
         public double AxisUnit { get; set; }
@@ -104,6 +98,7 @@ namespace FishingFun
                 OnPropertyChanged("AxisMax");
             }
         }
+
         public double AxisMin
         {
             get { return _axisMin; }
@@ -130,6 +125,6 @@ namespace FishingFun
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged implementation
     }
 }

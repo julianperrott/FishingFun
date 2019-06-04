@@ -22,7 +22,7 @@ namespace FishingFun
             var max = Math.Max(color1, color2);
             var min = Math.Min(color1, color2);
 
-            return min * ColourClosenessMultiplier > max-20;
+            return min * ColourClosenessMultiplier > max - 20;
         }
     }
 }

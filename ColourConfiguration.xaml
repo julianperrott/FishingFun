@@ -21,8 +21,8 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -36,7 +36,7 @@
                         <ColumnDefinition  Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                
+
                     <Label Name="LabelRed"  Grid.Column="1" Content="Here" />
 
                 <Slider  Grid.Column="1" Margin="50,10,10,10" Foreground="Blue"
@@ -50,11 +50,8 @@
                 TickPlacement="BottomRight" />
             </Grid>
 
-            <Button Click="Capture_Click" Content="Capture Screen" Grid.Column="1" Grid.Row="1" Width="100" Height="30"/>
-
-
+            <Button Click="Capture_Click" Content="Capture Screen" Grid.Column="1" Grid.Row="1" Width="100" Height="30" />
         </Grid>
-
 
         <Slider  Grid.Column="1" Margin="20,10,10,10" Foreground="Blue"
                 ValueChanged="ColourClosenessMultiplier_ValueChanged"
@@ -65,7 +62,7 @@
             Value="{Binding ColourClosenessMultiplier}"
             Thumb.DragCompleted="Slider_DragCompleted"
             TickPlacement="BottomRight" />
-        <Label Name="LabelColourClosenessMultiplier" Grid.Row="2" Grid.Column="1"/>
+        <Label Name="LabelColourClosenessMultiplier" Grid.Row="2" Grid.Column="1" />
 
         <Slider Grid.Column="2" Margin="20,10,10,10" Foreground="Blue"
                 ValueChanged="ColourMultiplier_ValueChanged"
@@ -76,7 +73,6 @@
             Value="{Binding ColourMultiplier}"
             Thumb.DragCompleted="Slider_DragCompleted"
             TickPlacement="BottomRight" />
-        <Label Name="LabelColourMultiplier" Grid.Row="2" Grid.Column="2"/>
-
+        <Label Name="LabelColourMultiplier" Grid.Row="2" Grid.Column="2" />
     </Grid>
 </Window>

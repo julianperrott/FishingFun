@@ -14,7 +14,7 @@ namespace FishingFun
         private int yDiff;
         private TimedAction timer;
 
-        public event EventHandler<BobberMoveEvent> BobberMoveEvent;
+        public event EventHandler<FishingEvent> FishingEventHandler;
 
         public PositionBiteWatcher(int strikeValue)
         {
@@ -23,11 +23,13 @@ namespace FishingFun
 
         public void Reset(Point InitialBobberPosition)
         {
+            FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Reset });
+
             yPositions = new List<int>();
             yPositions.Add(InitialBobberPosition.Y);
-            timer = new TimedAction((a) => {
-                BobberMoveEvent?.Invoke(this, new BobberMoveEvent { Amplitude = yDiff, Threshold = false });
-                //logger.Info($"Delta pos: {yDiff}");
+            timer = new TimedAction((a) =>
+            {
+                FishingEventHandler?.Invoke(this, new FishingEvent { Amplitude = yDiff, Action = FishingAction.BobberMove });
             }, 500, 25);
         }
 
@@ -47,7 +49,7 @@ namespace FishingFun
 
             if (thresholdReached)
             {
-                BobberMoveEvent?.Invoke(this, new BobberMoveEvent { Amplitude = yDiff, Threshold = thresholdReached });
+                FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Loot });
                 timer.ExecuteNow();
                 return true;
             }

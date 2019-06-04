@@ -14,10 +14,16 @@ namespace FishingFun
         public Point Point { get; set; }
     }
 
-    public class BobberMoveEvent : EventArgs
+    public enum FishingAction
     {
-        public int Amplitude;
+        BobberMove,
+        Reset,
+        Loot
+    }
 
-        public bool Threshold;
+    public class FishingEvent : EventArgs
+    {
+        public FishingAction Action;
+        public int Amplitude;
     }
 }

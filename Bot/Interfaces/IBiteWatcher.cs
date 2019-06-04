@@ -9,6 +9,6 @@ namespace FishingFun
 
         bool IsBite(Point currentBobberPosition);
 
-        event EventHandler<BobberMoveEvent> BobberMoveEvent;
+        event EventHandler<FishingEvent> FishingEventHandler;
     }
 }

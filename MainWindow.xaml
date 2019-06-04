@@ -101,15 +101,15 @@
         </Grid.ColumnDefinitions>
         <WrapPanel  Grid.Column="1">
             <Button Name="Play" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Play_Click"
+                Click="Play_Click" ToolTip="Start"
                 BorderThickness="0" Background="Transparent">
                 <StackPanel>
-                    <Image Name="PlayImage" Source="Resources/play.png" Style="{StaticResource HQRender}"  />
+                    <Image Name="PlayImage" Source="Resources/play.png" Style="{StaticResource HQRender}" />
                     <Image Name="PlayImage_Disabled" Visibility="Collapsed" Source="Resources/play_disabled.png"  Style="{StaticResource HQRender}" />
                 </StackPanel>
             </Button>
             <Button Name="Stop" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Stop_Click" IsEnabled="false"
+                Click="Stop_Click" IsEnabled="false" ToolTip="Stop"
                 BorderThickness="0" Background="Transparent">
                 <StackPanel>
                     <Image Name="StopImage" Visibility="Collapsed" Source="Resources/stop.png"  Style="{StaticResource HQRender}" />
@@ -117,11 +117,19 @@
                 </StackPanel>
             </Button>
             <Button Name="Settings" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Settings_Click"
+                Click="Settings_Click" ToolTip="Colour Settings"
                 BorderThickness="0" Background="Transparent">
                 <StackPanel>
                     <Image Source="Resources/settings.png" Style="{StaticResource HQRender}" />
                 </StackPanel>
+            </Button>
+            <Button Name="CastKey" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
+                 ToolTip="Cast key - click to change" Click="CastKey_Click"
+                BorderThickness="0" Background="Transparent">
+                <Grid>
+                    <Image Source="Resources/Button.png" Style="{StaticResource HQRender}" />
+                    <TextBox LostFocus="KeyBind_LostFocus" KeyUp="KeyBind_KeyUp" GotFocus="CastKey_Focus"  MaxLength="1" BorderBrush="Transparent" Background="Transparent" Name="KeyBind" Text="4" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 10" />
+                </Grid>
             </Button>
         </WrapPanel>
 
@@ -131,10 +139,10 @@
 
                 <Grid Name="LootingGrid" Visibility="Collapsed">
                     <Viewbox Margin="40" StretchDirection="Both" Stretch="Uniform">
-                        <TextBlock Text="Looting..." Foreground="White"/>
+                        <TextBlock Text="Looting..." Foreground="White" />
                     </Viewbox>
                     <Viewbox Margin="40" StretchDirection="Both" Stretch="Uniform">
-                        <TextBlock Text="Looting..." Foreground="Red"  Margin="1 0 1 0"/>
+                        <TextBlock Text="Looting..." Foreground="Red"  Margin="1 0 1 0" />
                     </Viewbox>
                 </Grid>
             </Grid>
@@ -142,12 +150,11 @@
         <Grid Grid.Column="1"  Grid.Row="1" Margin="5 5 5 5">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="200" />
             </Grid.RowDefinitions>
 
             <local:ConstantChangesChart x:Name="Chart" Grid.Row="1" AxisMax="10"></local:ConstantChangesChart>
-
 
             <DockPanel  Margin="5 0 0 0 ">
 

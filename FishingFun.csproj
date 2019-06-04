@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\ReticleDrawer.cs" />
     <Page Include="ColourConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +105,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Platform\BitmapExtension.cs" />
     <Compile Include="Platform\Keys.cs" />
     <Compile Include="Platform\TimedAction.cs" />
     <Compile Include="Platform\WowProcess.cs" />
@@ -156,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\fishingfun.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Button.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
