@@ -17,6 +17,9 @@ namespace FishingFun
         private IBiteWatcher biteWatcher;
         private bool isEnabled;
         private bool isRunning = false;
+        private Stopwatch stopwatch = new Stopwatch();
+
+        public event EventHandler<FishingEvent> FishingEventHandler;
 
         public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey)
         {
@@ -24,11 +27,13 @@ namespace FishingFun
             this.biteWatcher = biteWatcher;
             this.castKey = castKey;
 
-            logger.Info("FishBot cstr.");
+            logger.Info("FishBot Created.");
         }
 
         public void Start()
         {
+            biteWatcher.FishingEventHandler = (e) => FishingEventHandler?.Invoke(this, e);
+
             isEnabled = true;
             isRunning = true;
 
@@ -38,8 +43,11 @@ namespace FishingFun
                 {
                     logger.Info($"Pressing key {castKey} to Cast.");
 
+                    FishingEventHandler.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
                     WowProcess.PressKey(castKey);
-                    Sleep(2000);
+
+                    Watch(2000);
+
                     WaitForBite();
                 }
                 catch (Exception e)
@@ -50,6 +58,18 @@ namespace FishingFun
 
             isRunning = false;
             logger.Error("Bot has Stopped.");
+        }
+
+        private void Watch(int milliseconds)
+        {
+            bobberFinder.Reset();
+            stopwatch.Reset();
+            stopwatch.Start();
+            while (stopwatch.ElapsedMilliseconds < milliseconds)
+            {
+                bobberFinder.Find();
+            }
+            stopwatch.Stop();
         }
 
         public void Stop()

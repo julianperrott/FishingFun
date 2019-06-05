@@ -14,22 +14,30 @@ namespace FishingFun
         private int yDiff;
         private TimedAction timer;
 
-        public event EventHandler<FishingEvent> FishingEventHandler;
+        public Action<FishingEvent> FishingEventHandler { set; get; }
 
         public PositionBiteWatcher(int strikeValue)
         {
             this.strikeValue = strikeValue;
         }
 
+        public void RaiseEvent(FishingEvent ev)
+        {
+            if (FishingEventHandler!=null)
+            {
+                FishingEventHandler(ev);
+            }
+        }
+
         public void Reset(Point InitialBobberPosition)
         {
-            FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Reset });
+            RaiseEvent(new FishingEvent { Action = FishingAction.Reset });
 
             yPositions = new List<int>();
             yPositions.Add(InitialBobberPosition.Y);
             timer = new TimedAction((a) =>
             {
-                FishingEventHandler?.Invoke(this, new FishingEvent { Amplitude = yDiff, Action = FishingAction.BobberMove });
+                RaiseEvent(new FishingEvent { Amplitude = yDiff, Action = FishingAction.BobberMove });
             }, 500, 25);
         }
 
@@ -49,7 +57,7 @@ namespace FishingFun
 
             if (thresholdReached)
             {
-                FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Loot });
+                RaiseEvent(new FishingEvent { Action = FishingAction.Loot });
                 timer.ExecuteNow();
                 return true;
             }

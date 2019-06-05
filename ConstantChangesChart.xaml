@@ -13,19 +13,54 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--Here we disable tooltips and hovering to get a better performance-->
-        <lvc:CartesianChart Grid.Row="1" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
+        <lvc:CartesianChart Name="Chart" Grid.Row="1" DisableAnimations="true" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
+            <lvc:CartesianChart.Resources>
+                <Style TargetType="lvc:Separator">
+                    <Setter Property="Stroke" Value="#DADADA"></Setter>
+                    <Setter Property="StrokeThickness" Value="2"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="AxisOrientation" Value="X">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </lvc:CartesianChart.Resources>
             <lvc:CartesianChart.Series>
+
+                <lvc:LineSeries Values="{Binding ChartValues2}"
+                                PointGeometry="{x:Null}"
+                                LineSmoothness="0"
+                                StrokeThickness="1"
+                                Stroke="Blue"
+                                Fill="LightBlue" />
+
                 <lvc:LineSeries Values="{Binding ChartValues}"
                                 PointGeometry="{x:Null}"
                                 LineSmoothness="0"
                                 StrokeThickness="6"
                                 Stroke="#F34336"
-                                Fill="Transparent" />
-                <lvc:LineSeries Values="{Binding ChartValues2}"
+                                DataLabels = "True"
+                                Fill="Transparent">
+                    <lvc:LineSeries.DataLabelsTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="0 0 4 0" Foreground="White" Text="{Binding Path=FormattedText}" Height="20" Width="20" Padding="6,2,0,0">
+                                <TextBlock.Background>
+                                    <VisualBrush>
+                                        <VisualBrush.Visual>
+                                            <Ellipse Height="10" Width="10" Stroke="DarkGray"  Fill="Gray" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBlock.Background>
+                            </TextBlock>
+                        </DataTemplate>
+                    </lvc:LineSeries.DataLabelsTemplate>
+                </lvc:LineSeries>
+
+                <lvc:LineSeries Values="{Binding ChartValues3}"
                                 PointGeometry="{x:Null}"
                                 LineSmoothness="0"
-                                StrokeThickness="6"
-                                Stroke="Blue"
+                                StrokeThickness="1"
+                                Stroke="Black"
                                 Fill="Transparent" />
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisX>

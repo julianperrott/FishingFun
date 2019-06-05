@@ -18,7 +18,8 @@ namespace FishingFun
     {
         BobberMove,
         Reset,
-        Loot
+        Loot,
+        Cast
     }
 
     public class FishingEvent : EventArgs

@@ -16,11 +16,11 @@ namespace FishingFun
     {
         private double _axisMax;
         private double _axisMin;
-        private double _trend;
 
         public ConstantChangesChart()
         {
             InitializeComponent();
+            this.Chart.DisableAnimations = false;
 
             //To handle live data easily, in this case we built a specialized type
             //the MeasureModel class, it only contains 2 properties
@@ -41,8 +41,21 @@ namespace FishingFun
             Charting.For<MeasureModel>(mapper);
 
             //the values property will store our values array
-            ChartValues = new ChartValues<MeasureModel>();
-            ChartValues2 = new ChartValues<MeasureModel>();
+            ChartValues = new ChartValues<MeasureModel>()
+            {
+                new MeasureModel{ DateTime=DateTime.Now.AddSeconds(1), Value=0 },
+                new MeasureModel{ DateTime=DateTime.Now.AddSeconds(100), Value=0 }
+            };
+            ChartValues2 = new ChartValues<MeasureModel>()
+            {
+                new MeasureModel { DateTime = DateTime.Now.AddSeconds(1), Value = 0 },
+                new MeasureModel { DateTime = DateTime.Now.AddSeconds(100), Value = 0 }
+            };
+            ChartValues3 = new ChartValues<MeasureModel>()
+            {
+                new MeasureModel { DateTime = DateTime.Now.AddSeconds(1), Value = 0 },
+                new MeasureModel { DateTime = DateTime.Now.AddSeconds(100), Value = 0 }
+            };
 
             //lets set how to display the X Labels
             DateTimeFormatter = value => "";
@@ -68,12 +81,6 @@ namespace FishingFun
                 Value = value
             });
 
-            ChartValues2.Add(new MeasureModel
-            {
-                DateTime = now,
-                Value = -7
-            });
-
             SetAxisLimits(now);
         }
 
@@ -81,10 +88,37 @@ namespace FishingFun
         {
             this.ChartValues.Clear();
             this.ChartValues2.Clear();
+            this.ChartValues3.Clear();
+
+            ChartValues2.Add(new MeasureModel
+            {
+                DateTime = DateTime.Now.AddSeconds(-12),
+                Value = 0
+            });
+
+            ChartValues2.Add(new MeasureModel
+            {
+                DateTime = DateTime.Now.AddSeconds(25),
+                Value = 0
+            });
+
+            ChartValues3.Add(new MeasureModel
+            {
+                DateTime = DateTime.Now.AddSeconds(-12),
+                Value = -7
+            });
+
+            ChartValues3.Add(new MeasureModel
+            {
+                DateTime = DateTime.Now.AddSeconds(25),
+                Value = -7
+            });
         }
 
         public ChartValues<MeasureModel> ChartValues { get; set; }
         public ChartValues<MeasureModel> ChartValues2 { get; set; }
+
+        public ChartValues<MeasureModel> ChartValues3 { get; set; }
         public Func<double, string> DateTimeFormatter { get; set; }
         public double AxisStep { get; set; }
         public double AxisUnit { get; set; }

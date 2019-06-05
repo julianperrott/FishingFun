@@ -3,11 +3,8 @@ using log4net.Core;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.ObjectModel;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace FishingFun
@@ -30,6 +27,8 @@ namespace FishingFun
 
         public MainWindow()
         {
+            this.Closing += MainWindow_Closing;
+
             InitializeComponent();
             this.DataContext = this;
 
@@ -48,7 +47,11 @@ namespace FishingFun
             }
 
             this.biteWatcher = new PositionBiteWatcher(strikeValue);
-            this.biteWatcher.FishingEventHandler += FishingEventHandler;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            bot?.Stop();
         }
 
         private void FishingEventHandler(object sender, FishingEvent e)
@@ -58,10 +61,12 @@ namespace FishingFun
                 case FishingAction.BobberMove:
                     this.Chart.Add(e.Amplitude);
                     break;
+
                 case FishingAction.Loot:
                     this.LootingGrid.Visibility = Visibility.Visible;
                     break;
-                case FishingAction.Reset:
+
+                case FishingAction.Cast:
                     this.Chart.ClearChart();
                     this.LootingGrid.Visibility = Visibility.Collapsed;
                     break;
@@ -105,6 +110,7 @@ namespace FishingFun
                 SetImageVisibility();
 
                 bot = new FishingBot(bobberFinder, this.biteWatcher, castKey);
+                bot.FishingEventHandler += FishingEventHandler;
 
                 bot.Start();
                 bot = null;
@@ -118,7 +124,6 @@ namespace FishingFun
         {
             bot.Stop();
         }
-
 
         private void ImageProvider_BitmapEvent(object sender, BobberBitmapEvent e)
         {

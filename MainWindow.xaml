@@ -95,9 +95,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="70*" />
             <!-- Or Auto -->
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="30*" />
         </Grid.ColumnDefinitions>
         <WrapPanel  Grid.Column="1">
             <Button Name="Play" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
@@ -133,7 +133,7 @@
             </Button>
         </WrapPanel>
 
-        <DockPanel Grid.Column="0"  Grid.Row="0" Margin="5 0 0 0 " Grid.RowSpan="2" Background="Black">
+        <DockPanel Grid.Column="0"  Grid.Row="0" Margin="0" Grid.RowSpan="2" Background="Black">
             <Grid>
                 <Image Name="Screenshot"  HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Source="Resources/FishingFun.png" />
 
@@ -147,34 +147,37 @@
                 </Grid>
             </Grid>
         </DockPanel>
-        <Grid Grid.Column="1"  Grid.Row="1" Margin="5 5 5 5">
+        <Grid Grid.Column="1"  Grid.Row="1" Margin="5 5 5 5" >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="200" />
             </Grid.RowDefinitions>
 
+            
+
             <local:ConstantChangesChart x:Name="Chart" Grid.Row="1" AxisMax="10"></local:ConstantChangesChart>
+            
+            <TextBlock Text="Bobber Amplitude Visualiser" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 0"  />
 
-            <DockPanel  Margin="5 0 0 0 ">
+            <DockPanel  Margin="0 0 0 0 ">
 
-                <TextBlock Text="{Binding Count, StringFormat='{}{0} Items'}"
-               DockPanel.Dock="Top" />
-
-                <ItemsControl ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}">
-                    <ItemsControl.Template>
-                        <ControlTemplate>
-                            <ScrollViewer CanContentScroll="True">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <Border Grid.Row="1" BorderThickness="0 1 0 1" BorderBrush="LightGray">
+                    <ItemsControl Margin="5 0 0 0 " ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer CanContentScroll="True">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
             </DockPanel>
         </Grid>
     </Grid>
