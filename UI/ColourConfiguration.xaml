@@ -1,0 +1,67 @@
+﻿<Window x:Class="FishingFun.ColourConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FishingFun"
+        Icon="/FishingFun;component/Resources/fishingfun.ico"
+        mc:Ignorable="d"
+        Title="Colour Explorer" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Hand Image -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Label Grid.Column="0" Grid.Row="0" Content="Red:" />
+            <Label Name="LabelRed"  Grid.Column="0" Grid.Row="1" Content="123" />
+            <Slider Grid.Column="0"  Grid.Row="2"  Margin="5,0,0,0" Foreground="Blue" Minimum="0" ValueChanged="Red_ValueChanged" Maximum="255" Orientation="Vertical" TickFrequency="20" Value="{Binding RedValue}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
+
+            <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"  Name="ColourDisplay" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/FishingFun;component/Resources/FishingFun.png" />
+        </Grid>
+
+        <!-- Right Hand Image -->
+        <Image Grid.Column="1" Margin="5 0 5 0"  Name="WowScreenshot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/FishingFun;component/Resources/FishingFun.png" />
+
+        <!-- Bottom Left Sliders -->
+        <Grid Grid.Row="1" Margin="5 5 0 0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0">
+                <TextBlock TextWrapping="WrapWithOverflow" Name="LabelColourMultiplier" Text="Label goes here"/>
+                <Slider  Margin="20 0 00 10" Foreground="Blue" ValueChanged="ColourMultiplier_ValueChanged" Minimum="0" Maximum="100" Orientation="Horizontal" TickFrequency="20" Value="{Binding ColourMultiplier}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="1">
+                <TextBlock TextWrapping="WrapWithOverflow" Name="LabelColourClosenessMultiplier" Text="Label goes here"/>
+                <Slider Margin="20 0 10 20" Foreground="Blue" ValueChanged="ColourClosenessMultiplier_ValueChanged" Minimum="0" Maximum="500" Orientation="Horizontal" TickFrequency="20" Value="{Binding ColourClosenessMultiplier}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Bottom Right Button -->
+        <Button Click="Capture_Click" Content="Capture Screen" Grid.Column="1" Grid.Row="1" Width="100" Height="30" />
+    </Grid>
+</Window>

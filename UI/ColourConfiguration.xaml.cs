@@ -111,18 +111,18 @@ namespace FishingFun
 
         private void Red_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelRed.Content = $"Red: {this.RedValue}";
+            this.LabelRed.Content = this.RedValue;
             RenderColour(false);
         }
 
         private void ColourMultiplier_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelColourMultiplier.Content = $"Colour Multiplier: {this.pixelClassifier.ColourMultiplier}";
+            this.LabelColourMultiplier.Text = $"Red multiplied by {this.pixelClassifier.ColourMultiplier} must be greater than green and blue.";
         }
 
         private void ColourClosenessMultiplier_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelColourClosenessMultiplier.Content = $"Colour Closeness: {this.pixelClassifier.ColourClosenessMultiplier}";
+            this.LabelColourClosenessMultiplier.Text = $"How close Green and Blue need to be to each other: {this.pixelClassifier.ColourClosenessMultiplier}";
         }
 
         private void Slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)

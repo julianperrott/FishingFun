@@ -14,7 +14,7 @@ namespace FishingFun
 
         private bool isBigger(byte red, byte other)
         {
-            return (red * ColourMultiplier) > other;// && red - ColourDifference > other;
+            return (red * ColourMultiplier) > other;
         }
 
         private bool areClose(byte color1, byte color2)

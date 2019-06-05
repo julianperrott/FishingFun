@@ -13,7 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--Here we disable tooltips and hovering to get a better performance-->
-        <lvc:CartesianChart Name="Chart" Grid.Row="1" DisableAnimations="true" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
+        <lvc:CartesianChart Name="Chart" Grid.Row="1" DisableAnimations="False" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Resources>
                 <Style TargetType="lvc:Separator">
                     <Setter Property="Stroke" Value="#DADADA"></Setter>

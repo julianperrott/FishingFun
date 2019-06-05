@@ -66,16 +66,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\KeyBindChooser.xaml.cs">
+      <DependentUpon>KeyBindChooser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ReticleDrawer.cs" />
-    <Page Include="ColourConfiguration.xaml">
+    <Page Include="UI\ColourConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConstantChangesChart.xaml">
+    <Page Include="UI\ConstantChangesChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -83,7 +86,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ColourConfiguration.xaml.cs">
+    <Compile Include="UI\ColourConfiguration.xaml.cs">
       <DependentUpon>ColourConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bot\BobberColourPointFinder.cs" />
@@ -95,14 +98,18 @@
     <Compile Include="Bot\PixelClassifier.cs" />
     <Compile Include="Bot\PositionBiteWatcher.cs" />
     <Compile Include="Bot\SearchBobberFinder.cs" />
-    <Compile Include="ConstantChangesChart.xaml.cs">
+    <Compile Include="UI\ConstantChangesChart.xaml.cs">
       <DependentUpon>ConstantChangesChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogClasses.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\KeyBindChooser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Platform\BitmapExtension.cs" />
