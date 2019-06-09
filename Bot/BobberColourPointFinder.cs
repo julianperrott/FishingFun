@@ -18,19 +18,13 @@ namespace FishingFun
         public Point Find()
         {
             this.bmp = WowScreen.GetBitmap();
-            //bmp.Save($"c:/temp/Fish_{DateTime.Now.ToFileTime()}.bmp");
 
             const int targetOffset = 15;
 
-            var widthLower = bmp.Width / 4; // Quarter
-            var widthHigher = (bmp.Width / 4) * 3; // 2 thirds
-            var heightLower = bmp.Height / 4; // Quarter
-            var heightHigher = (bmp.Height / 4) * 3;
-
-            widthLower = 0;
-            widthHigher = bmp.Width;
-            heightLower = 0;
-            heightHigher = bmp.Height;
+            var widthLower = 0;
+            var widthHigher = bmp.Width;
+            var heightLower = 0;
+            var heightHigher = bmp.Height;
 
             var targetRedLb = targetColor.R - targetOffset;
             var targetRedHb = targetColor.R + targetOffset;

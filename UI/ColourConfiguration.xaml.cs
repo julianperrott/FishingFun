@@ -47,7 +47,7 @@ namespace FishingFun
             this.DataContext = this;
         }
 
-        private void RenderColour(bool rendedMatchedArea)
+        private void RenderColour(bool renderMatchedArea)
         {
             var bitmap = new System.Drawing.Bitmap(256, 256);
 
@@ -68,44 +68,53 @@ namespace FishingFun
             if (ScreenCapture == null)
             {
                 ScreenCapture = WowScreen.GetBitmap();
+                renderMatchedArea = true;
             }
 
             this.ColourDisplay.Source = bitmap.ToBitmapImage();
             this.WowScreenshot.Source = ScreenCapture.ToBitmapImage();
 
-            if (rendedMatchedArea)
+            if (renderMatchedArea)
             {
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                Dispatch(() =>
                 {
-                    foreach (var point in points)
-                    {
-                        if (points.Where(p =>
-                        (p.X == point.X && (p.Y == point.Y - 1 || p.Y == point.Y + 1)) || (p.Y == point.Y && (p.X == point.X - 1 || p.X == point.X + 1)))
-                        .Count() < 4)
-                        {
-                            bitmap.SetPixel(point.X, point.Y, Color.White);
-                        }
-                    }
+                    MarkEdgeOfRedArea(bitmap, points);
                     this.ColourDisplay.Source = bitmap.ToBitmapImage();
-                }));
+                });
 
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                Dispatch(() =>
                 {
                     Bitmap bmp = new Bitmap(ScreenCapture);
-
-                    for (int x = 0; x < bmp.Width; x++)
-                    {
-                        for (int y = 0; y < bmp.Height; y++)
-                        {
-                            var pixel = bmp.GetPixel(x, y);
-                            if (this.pixelClassifier.IsMatch(pixel.R, pixel.G, pixel.B))
-                            {
-                                bmp.SetPixel(x, y, Color.Red);
-                            }
-                        }
-                    }
+                    MarkRedOnBitmap(bmp);
                     this.WowScreenshot.Source = bmp.ToBitmapImage();
-                }));
+                });
+            }
+        }
+
+        private void MarkRedOnBitmap(Bitmap bmp)
+        {
+            for (int x = 0; x < bmp.Width; x++)
+            {
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    var pixel = bmp.GetPixel(x, y);
+                    if (this.pixelClassifier.IsMatch(pixel.R, pixel.G, pixel.B))
+                    {
+                        bmp.SetPixel(x, y, Color.Red);
+                    }
+                }
+            }
+        }
+
+        private static void MarkEdgeOfRedArea(Bitmap bitmap, List<Point> points)
+        {
+            foreach (var point in points)
+            {
+                var pointsClose = points.Count(p => (p.X == point.X && (p.Y == point.Y - 1 || p.Y == point.Y + 1)) || (p.Y == point.Y && (p.X == point.X - 1 || p.X == point.X + 1)));
+                if (pointsClose < 4)
+                {
+                    bitmap.SetPixel(point.X, point.Y, Color.White);
+                }
             }
         }
 
@@ -134,6 +143,12 @@ namespace FishingFun
         {
             ScreenCapture = WowScreen.GetBitmap();
             RenderColour(true);
+        }
+
+        private void Dispatch(Action action)
+        {
+            System.Windows.Application.Current?.Dispatcher.BeginInvoke((Action)(() => action()));
+            System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(delegate { }));
         }
     }
 }

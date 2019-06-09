@@ -1,32 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FishingFun
 {
-    /// <summary>
-    /// Interaction logic for KeyBindChooser.xaml
-    /// </summary>
     public partial class KeyBindChooser : UserControl
     {
         public ConsoleKey CastKey { get; set; } = ConsoleKey.D4;
 
-        public UIElement FocusTarget { get; set; }
+        private static string Filename = "keybind.txt";
+
+        public EventHandler CastKeyChanged;
 
         public KeyBindChooser()
         {
             InitializeComponent();
+            ReadConfiguration();
+        }
+
+        private void ReadConfiguration()
+        {
+            try
+            {
+                if (File.Exists(Filename))
+                {
+                    var contents = File.ReadAllText(Filename);
+                    CastKey = (ConsoleKey)int.Parse(contents);
+                    KeyBind.Text = GetCastKeyText(this.CastKey);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                CastKey = ConsoleKey.D4;
+                KeyBind.Text = GetCastKeyText(this.CastKey);
+            }
+        }
+
+        private void WriteConfiguration()
+        {
+            File.WriteAllText(Filename, ((int)CastKey).ToString());
         }
 
         private void CastKey_Focus(object sender, RoutedEventArgs e)
@@ -48,23 +62,12 @@ namespace FishingFun
                 if (Enum.TryParse<ConsoleKey>(key, out ck))
                 {
                     this.CastKey = ck;
-                    KeyBind.Text = GetCastKeyText(this.CastKey);
-
-                    FocusTarget?.Focus();
-
+                    WriteConfiguration();
+                    CastKeyChanged?.Invoke(this, null);
                     return;
                 }
             }
             KeyBind.Text = "";
-        }
-
-        private void KeyBind_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ProcessKeybindText(KeyBind.Text);
-            if (string.IsNullOrEmpty(KeyBind.Text))
-            {
-                KeyBind.Text = GetCastKeyText(this.CastKey);
-            }
         }
 
         private string GetCastKeyText(ConsoleKey ck)

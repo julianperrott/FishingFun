@@ -1,12 +1,4 @@
-﻿<Window x:Class="FishingFun.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FishingFun"
-        mc:Ignorable="d"
-        Background="#FFFFFF"
-        Title="Chrome" Height="450" Width="800" Icon="/FishingFun;component/Resources/fishingfun.ico">
+﻿<Window x:Class="FishingFun.MainWindow" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:FishingFun" mc:Ignorable="d" Background="#FFFFFF" Title="Chrome" Height="550" Width="800" Icon="/Chrome;component/Resources/fishingfun.ico">
     <Window.Resources>
         <Style TargetType="Image" x:Key="HQRender">
             <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
@@ -40,17 +32,13 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding Time}" Grid.Column="0"
-                       FontWeight="Bold" Margin="5,0,5,0" />
+                <TextBlock Text="{Binding Time}" Grid.Column="0" FontWeight="Bold" Margin="5,0,5,0" />
 
-                <TextBlock Text="{Binding Index}" Grid.Column="1"
-                       FontWeight="Bold" Margin="0,0,2,0" />
+                <TextBlock Text="{Binding Index}" Grid.Column="1" FontWeight="Bold" Margin="0,0,2,0" />
 
-                <TextBlock Text="{Binding Message}" Grid.Column="2"
-                       TextWrapping="Wrap" />
+                <TextBlock Text="{Binding Message}" Grid.Column="2" TextWrapping="Wrap" />
             </Grid>
         </DataTemplate>
-
     </Window.Resources>
 
     <Grid>
@@ -63,85 +51,125 @@
             <!-- Or Auto -->
             <ColumnDefinition Width="30*" MinWidth="300" />
         </Grid.ColumnDefinitions>
-        <WrapPanel  Grid.Column="1">
-            <Button Name="Play" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Play_Click" ToolTip="Start"
-                BorderThickness="0" Background="Transparent">
-                <StackPanel>
-                    <Image Name="PlayImage" Source="/FishingFun;component/Resources/play.png" Style="{StaticResource HQRender}" />
-                    <Image Name="PlayImage_Disabled" Visibility="Collapsed" Source="/FishingFun;component/Resources/play_disabled.png"  Style="{StaticResource HQRender}" />
-                </StackPanel>
-            </Button>
-            <Button Name="Stop" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Stop_Click" IsEnabled="false" ToolTip="Stop"
-                BorderThickness="0" Background="Transparent">
-                <StackPanel>
-                    <Image Name="StopImage" Visibility="Collapsed" Source="/FishingFun;component/Resources/stop.png"  Style="{StaticResource HQRender}" />
-                    <Image Name="StopImage_Disabled"  Source="/FishingFun;component/Resources/stop_disabled.png"  Style="{StaticResource HQRender}" />
-                </StackPanel>
-            </Button>
-            <Button Name="Settings" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                Click="Settings_Click" ToolTip="Colour Settings"
-                BorderThickness="0" Background="Transparent">
-                <StackPanel>
-                    <Image Source="/FishingFun;component/Resources/settings.png" Style="{StaticResource HQRender}" />
-                </StackPanel>
-            </Button>
-            <Button Name="CastKey" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50"
-                 ToolTip="Cast key - click to change" Click="CastKey_Click"
-                BorderThickness="0" Background="Transparent">
-                <Grid>
-                    <Image Source="/FishingFun;component/Resources/Button.png" Style="{StaticResource HQRender}" />
-                    <local:KeyBindChooser x:Name="KeyChooser"/>
-                </Grid>
-            </Button>
-        </WrapPanel>
+        <materialDesign:Card Grid.Column="1" Padding="5" Margin="3">
+            <WrapPanel>
+                <Button Name="Play" Padding="0" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50" Click="Play_Click" ToolTip="Start" BorderThickness="0" Background="Transparent">
+                    <StackPanel>
+                        <Image Name="PlayImage" Source="/Chrome;component/Resources/play.png" Style="{StaticResource HQRender}" />
+                        <Image Name="PlayImage_Disabled" Visibility="Collapsed" Source="/Chrome;component/Resources/play_disabled.png" Style="{StaticResource HQRender}" />
+                    </StackPanel>
+                </Button>
+                <Button Name="Stop" Padding="0" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50" Click="Stop_Click" IsEnabled="false" ToolTip="Stop" BorderThickness="0" Background="Transparent">
+                    <StackPanel>
+                        <Image Name="StopImage" Visibility="Collapsed" Source="/Chrome;component/Resources/stop.png" Style="{StaticResource HQRender}" />
+                        <Image Name="StopImage_Disabled" Source="/Chrome;component/Resources/stop_disabled.png" Style="{StaticResource HQRender}" />
+                    </StackPanel>
+                </Button>
+                <Button Name="Settings" Padding="0" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50" Click="Settings_Click" ToolTip="Colour Settings" BorderThickness="0" Background="Transparent">
+                    <StackPanel>
+                        <Image Source="/Chrome;component/Resources/settings.png" Style="{StaticResource HQRender}" />
+                    </StackPanel>
+                </Button>
+                <Button Name="CastKey" Padding="0" Height="50" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="50" ToolTip="Cast key - click to change" Click="CastKey_Click" BorderThickness="0" Background="Transparent">
+                    <Grid>
+                        <Image Source="/Chrome;component/Resources/Button.png" Style="{StaticResource HQRender}" />
+                        <local:KeyBindChooser x:Name="KeyChooser" />
+                    </Grid>
+                </Button>
+            </WrapPanel>
+        </materialDesign:Card>
 
-        <DockPanel Grid.Column="0"  Grid.Row="0" Margin="0" Grid.RowSpan="2" Background="Black">
+        <DockPanel Name="ImageBackground" Grid.Column="0" Grid.Row="0" Margin="0" Grid.RowSpan="2" Background="Black">
             <Grid>
-                <Image Name="Screenshot"  HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Source="/FishingFun;component/Resources/FishingFun.png" />
+                <Image Name="Screenshot" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Center" Source="/Chrome;component/Resources/FishingFun.png" />
 
                 <Grid Name="LootingGrid" Visibility="Collapsed">
                     <Viewbox Margin="40" StretchDirection="Both" Stretch="Uniform">
                         <TextBlock Text="Looting..." Foreground="White" />
                     </Viewbox>
                     <Viewbox Margin="40" StretchDirection="Both" Stretch="Uniform">
-                        <TextBlock Text="Looting..." Foreground="Red"  Margin="1 0 1 0" />
+                        <TextBlock Text="Looting..." Foreground="Red" Margin="1 0 1 0" />
                     </Viewbox>
                 </Grid>
             </Grid>
         </DockPanel>
-        <Grid Grid.Column="1"  Grid.Row="1" Margin="5 5 5 5" >
+        <Grid x:Name="CardGrid" Grid.Column="1" Grid.Row="1" Margin="5 0 5 5">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="200" />
+                <RowDefinition Height="250" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Border  Grid.Row="0"  Margin="0 0 0 0"  BorderThickness="0 1 0 0" BorderBrush="LightGray">
+            <materialDesign:Flipper Name="GraphFlipper" Margin="0 15 0 0" Grid.Row="0" Style="{StaticResource MaterialDesignCardFlipper}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <materialDesign:Flipper.FrontContent>
+                    <Grid Name="GraphGrid" Height="200" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <materialDesign:ColorZone Mode="Accent" Padding="6" Background="LightBlue">
 
-                <local:ConstantChangesChart x:Name="Chart" AxisMax="10"/>
-            </Border>
+                            <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CloseBoxOutline" HorizontalAlignment="Right" Width="24" Height="24" />
+                                    <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">
+                                    Bobber Amplitude Visualiser
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </materialDesign:ColorZone>
+                        <local:ConstantChangesChart x:Name="Chart" AxisMax="10" Grid.Row="1" />
+                    </Grid>
+                </materialDesign:Flipper.FrontContent>
 
-            <TextBlock Text="Bobber Amplitude Visualiser" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 10"  />
+                <materialDesign:Flipper.BackContent>
+                    <Button Background="LightBlue" Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" Margin="8">
+                        SHOW VISUALISER
+                    </Button>
+                </materialDesign:Flipper.BackContent>
+            </materialDesign:Flipper>
 
-            <Border Margin="0 15 0 0" Grid.Row="1" BorderThickness="0 1 0 1" BorderBrush="LightGray">
-                <ItemsControl Margin="5 0 0 0 " ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}">
-                    <ItemsControl.Template>
-                        <ControlTemplate>
-                            <ScrollViewer CanContentScroll="True">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Border>
+            <materialDesign:Flipper Name="LogFlipper" Margin="0 15 0 0" Grid.Row="1" Style="{StaticResource MaterialDesignCardFlipper}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <materialDesign:Flipper.FrontContent>
+                    <Grid Name="LogGrid" Height="100">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <materialDesign:ColorZone Mode="Accent" Padding="6" Name="LogHeader" Background="LightBlue">
 
+                            <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CloseBoxOutline" HorizontalAlignment="Right" Width="24" Height="24" />
+                                    <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">
+                                    Log
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </materialDesign:ColorZone>
+                        <ItemsControl Grid.Row="1" Margin="5 0 0 0 " ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}">
+                            <ItemsControl.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer CanContentScroll="True">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel IsItemsHost="True" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Grid>
+                </materialDesign:Flipper.FrontContent>
+
+                <materialDesign:Flipper.BackContent>
+                    <Button Background="LightBlue" Style="{StaticResource MaterialDesignFlatButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" Margin="8">
+                        SHOW LOG
+                    </Button>
+                </materialDesign:Flipper.BackContent>
+            </materialDesign:Flipper>
         </Grid>
     </Grid>
 </Window>

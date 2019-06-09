@@ -8,8 +8,6 @@
 
             bmp.SetPixel(point.X, point.Y, System.Drawing.Color.White);
 
-            //System.Diagnostics.Debug.WriteLine($"{p.R},{p.G},{p.B} at {bestp.X},{bestp.Y}");
-
             using (var gr = System.Drawing.Graphics.FromImage(bmp))
             {
                 gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;

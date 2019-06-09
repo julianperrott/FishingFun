@@ -53,11 +53,17 @@ namespace FishingFun
                 catch (Exception e)
                 {
                     logger.Error(e.ToString());
+                    Thread.Sleep(2000);
                 }
             }
 
             isRunning = false;
             logger.Error("Bot has Stopped.");
+        }
+
+        internal void SetCastKey(ConsoleKey castKey)
+        {
+            this.castKey = castKey;
         }
 
         private void Watch(int milliseconds)
@@ -95,7 +101,7 @@ namespace FishingFun
             var timedTask = new TimedAction((a) => { logger.Info("Fishing timed out!"); }, 25 * 1000, 25);
 
             // Wait for the bobber to move
-            while (true)
+            while (isEnabled)
             {
                 var currentBobberPosition = FindBobber();
                 if (currentBobberPosition == Point.Empty || currentBobberPosition.X == 0) { return; }
@@ -128,7 +134,7 @@ namespace FishingFun
             while (sw.Elapsed.TotalMilliseconds < ms)
             {
                 FlushBuffers();
-                System.Windows.Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new ThreadStart(delegate { }));
+                System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new ThreadStart(delegate { }));
                 Thread.Sleep(100);
             }
         }

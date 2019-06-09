@@ -23,7 +23,7 @@ namespace FishingFun
 
         public void RaiseEvent(FishingEvent ev)
         {
-            if (FishingEventHandler!=null)
+            if (FishingEventHandler != null)
             {
                 FishingEventHandler(ev);
             }
