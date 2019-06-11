@@ -20,6 +20,10 @@ Or compile the source and run it from visual studio.
 * Make sure the fishing float is in the middle of the screen.
 * Fish at ground level, not off docks or other high places.
 
+## Video
+
+[![Fishing Fun YouTube](https://img.youtube.com/vi/aWyqY7KFTtw/0.jpg)](https://www.youtube.com/watch?v=aWyqY7KFTtw)
+
 ## Screenshots
 
 ![Screenshot Fishing](https://raw.githubusercontent.com/julianperrott/FishingFun/master/post/img/Screenshot1.png "Fishing Fun - Fishing")
