@@ -66,6 +66,8 @@
         {
             this.Dispatch(() =>
             {
+                this.flyingFishAnimation.AnimationWidth = (int)this.ActualWidth;
+                this.flyingFishAnimation.AnimationHeight = (int)this.ActualHeight;
                 this.LogGrid.Height = this.LogFlipper.ActualHeight;
                 this.GraphGrid.Height = this.GraphFlipper.ActualHeight;
                 this.GraphGrid.Visibility = Visibility.Visible;
@@ -89,16 +91,21 @@
                 switch (e.Action)
                 {
                     case FishingAction.BobberMove:
-                        this.Chart.Add(e.Amplitude);
+                        if (!this.GraphFlipper.IsFlipped)
+                        {
+                            this.Chart.Add(e.Amplitude);
+                        }
                         break;
 
                     case FishingAction.Loot:
+                        this.flyingFishAnimation.Start();
                         this.LootingGrid.Visibility = Visibility.Visible;
                         break;
 
                     case FishingAction.Cast:
                         this.Chart.ClearChart();
                         this.LootingGrid.Visibility = Visibility.Collapsed;
+                        this.flyingFishAnimation.Stop();
                         setImageBackgroundColour = true;
                         break;
                 };
