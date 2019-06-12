@@ -19,6 +19,7 @@ Or compile the source and run it from visual studio.
 * Zoom in completely so your character is not visible.
 * Make sure the fishing float is in the middle of the screen.
 * Fish at ground level, not off docks or other high places.
+* It required WOW is running on the primary screen. It needs the wow screen to be on top. So it probably won't work well if you only have one screen.
 
 ## Video
 
