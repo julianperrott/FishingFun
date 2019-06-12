@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -64,19 +64,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=1.2.0.1418, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MaterialDesignColors.1.2.0-ci1418\lib\net45\MaterialDesignColors.dll</HintPath>
+      <HintPath>..\packages\MaterialDesignColors.1.2.0-ci1418\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.6.0.1435, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MaterialDesignThemes.2.6.0-ci1435\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+      <HintPath>..\packages\MaterialDesignThemes.2.6.0-ci1435\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -100,12 +100,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\BitmapExtension.cs" />
     <Compile Include="UI\FlyingFishAnimation.xaml.cs">
       <DependentUpon>FlyingFishAnimation.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\KeyBindChooser.xaml.cs">
       <DependentUpon>KeyBindChooser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\LogClasses.cs" />
     <Compile Include="UI\ReticleDrawer.cs" />
     <Page Include="UI\ColourConfiguration.xaml">
       <SubType>Designer</SubType>
@@ -130,19 +132,9 @@
     <Compile Include="UI\ColourConfiguration.xaml.cs">
       <DependentUpon>ColourConfiguration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Bot\BobberColourPointFinder.cs" />
-    <Compile Include="Bot\FishBot.cs" />
-    <Compile Include="Bot\Interfaces\IBiteWatcher.cs" />
-    <Compile Include="Bot\Interfaces\IBobberFinder.cs" />
-    <Compile Include="Bot\Interfaces\IImageProvider.cs" />
-    <Compile Include="Bot\Interfaces\IPixelClassifier.cs" />
-    <Compile Include="Bot\PixelClassifier.cs" />
-    <Compile Include="Bot\PositionBiteWatcher.cs" />
-    <Compile Include="Bot\SearchBobberFinder.cs" />
     <Compile Include="UI\ConstantChangesChart.xaml.cs">
       <DependentUpon>ConstantChangesChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Platform\LogClasses.cs" />
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -153,11 +145,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Platform\BitmapExtension.cs" />
-    <Compile Include="Platform\Keys.cs" />
-    <Compile Include="Platform\TimedAction.cs" />
-    <Compile Include="Platform\WowProcess.cs" />
-    <Compile Include="Platform\WowScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -175,9 +162,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -221,6 +205,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FishingFunBot\FishingFun.Bot.csproj">
+      <Project>{fe3fe463-dee3-459c-8c9d-9e872ab5ffa9}</Project>
+      <Name>FishingFun.Bot</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

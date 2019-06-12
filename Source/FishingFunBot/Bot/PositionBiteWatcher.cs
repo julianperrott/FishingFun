@@ -23,10 +23,7 @@ namespace FishingFun
 
         public void RaiseEvent(FishingEvent ev)
         {
-            if (FishingEventHandler != null)
-            {
-                FishingEventHandler(ev);
-            }
+            FishingEventHandler?.Invoke(ev);
         }
 
         public void Reset(Point InitialBobberPosition)

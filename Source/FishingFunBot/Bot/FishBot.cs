@@ -43,7 +43,7 @@ namespace FishingFun
                 {
                     logger.Info($"Pressing key {castKey} to Cast.");
 
-                    FishingEventHandler.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
+                    FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
                     WowProcess.PressKey(castKey);
 
                     Watch(2000);
@@ -61,7 +61,7 @@ namespace FishingFun
             logger.Error("Bot has Stopped.");
         }
 
-        internal void SetCastKey(ConsoleKey castKey)
+        public void SetCastKey(ConsoleKey castKey)
         {
             this.castKey = castKey;
         }
@@ -134,7 +134,7 @@ namespace FishingFun
             while (sw.Elapsed.TotalMilliseconds < ms)
             {
                 FlushBuffers();
-                System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new ThreadStart(delegate { }));
+                //System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new ThreadStart(delegate { }));
                 Thread.Sleep(100);
             }
         }

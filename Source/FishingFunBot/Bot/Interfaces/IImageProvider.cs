@@ -26,5 +26,10 @@ namespace FishingFun
     {
         public FishingAction Action;
         public int Amplitude;
+
+        public override string ToString()
+        {
+            return Action.ToString() + (Action == FishingAction.BobberMove ? " " + Amplitude : "");
+        }
     }
 }

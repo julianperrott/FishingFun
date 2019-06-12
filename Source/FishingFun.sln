@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingFun", "FishingFun.csproj", "{637ED1A1-6B55-4846-9321-F25E3163A2FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingFun.UI", "FishingFunUI\FishingFun.UI.csproj", "{637ED1A1-6B55-4846-9321-F25E3163A2FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingFun.Bot", "FishingFunBot\FishingFun.Bot.csproj", "{FE3FE463-DEE3-459C-8C9D-9E872AB5FFA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingFun.Console", "FishingFunConsole\FishingFun.Console.csproj", "{3E15D1B8-0C79-40E8-8BA4-192DD862F7A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{637ED1A1-6B55-4846-9321-F25E3163A2FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{637ED1A1-6B55-4846-9321-F25E3163A2FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{637ED1A1-6B55-4846-9321-F25E3163A2FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE3FE463-DEE3-459C-8C9D-9E872AB5FFA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE3FE463-DEE3-459C-8C9D-9E872AB5FFA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE3FE463-DEE3-459C-8C9D-9E872AB5FFA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE3FE463-DEE3-459C-8C9D-9E872AB5FFA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E15D1B8-0C79-40E8-8BA4-192DD862F7A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E15D1B8-0C79-40E8-8BA4-192DD862F7A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E15D1B8-0C79-40E8-8BA4-192DD862F7A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E15D1B8-0C79-40E8-8BA4-192DD862F7A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
