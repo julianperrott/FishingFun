@@ -109,7 +109,7 @@ namespace FishingFun
                 foreach (Score p in points)
                 {
                     p.count = points.Where(s => Math.Abs(s.point.X - p.point.X) < 10) // + or - 10 pixels horizontally
-                        .Where(s => Math.Abs(s.point.Y - p.point.Y) < 10) // + or - 5 pixels vertically
+                        .Where(s => Math.Abs(s.point.Y - p.point.Y) < 10) // + or - 10 pixels vertically
                         .Count();
                 }
 

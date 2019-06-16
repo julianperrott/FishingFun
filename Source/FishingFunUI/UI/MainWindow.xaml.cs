@@ -14,7 +14,7 @@
         private System.Drawing.Point lastPoint = System.Drawing.Point.Empty;
         public ObservableCollection<LogEntry> LogEntries { get; set; }
 
-        private SearchBobberFinder bobberFinder;
+        private IBobberFinder bobberFinder;
         private IPixelClassifier pixelClassifier;
         private IBiteWatcher biteWatcher;
         private ReticleDrawer reticleDrawer = new ReticleDrawer();
