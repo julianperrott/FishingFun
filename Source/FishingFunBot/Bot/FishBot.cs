@@ -16,7 +16,6 @@ namespace FishingFun
         private IBobberFinder bobberFinder;
         private IBiteWatcher biteWatcher;
         private bool isEnabled;
-        private bool isRunning = false;
         private Stopwatch stopwatch = new Stopwatch();
 
         public event EventHandler<FishingEvent> FishingEventHandler;
@@ -35,7 +34,6 @@ namespace FishingFun
             biteWatcher.FishingEventHandler = (e) => FishingEventHandler?.Invoke(this, e);
 
             isEnabled = true;
-            isRunning = true;
 
             while (isEnabled)
             {
@@ -57,7 +55,6 @@ namespace FishingFun
                 }
             }
 
-            isRunning = false;
             logger.Error("Bot has Stopped.");
         }
 
