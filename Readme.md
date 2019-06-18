@@ -69,14 +69,14 @@ If we find all the red pixels in middle half of the screen, then find the pixel 
 
 We can get a bitmap of the screen as below:
 <pre class="prettyprint">
-        public static Bitmap GetBitmap()
-        {
-            var bmpScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
-            var graphics = Graphics.FromImage(bmpScreen);
-            graphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4, 0, 0, bmpScreen.Size);
-            graphics.Dispose();
-            return bmpScreen;
-        }
+public static Bitmap GetBitmap()
+{
+    var bmpScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
+    var graphics = Graphics.FromImage(bmpScreen);
+    graphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4, 0, 0, bmpScreen.Size);
+    graphics.Dispose();
+    return bmpScreen;
+}
 </pre>
 
 #### Problem 2: Determining when a bite has taken place.
@@ -99,26 +99,26 @@ This is the algorithm I have created to determine redness:
 * Blue and Green are reasonably close together.
 
 <pre class="prettyprint" >
-        public double ColourMultiplier { get; set; } = 0.5;
-        public double ColourClosenessMultiplier { get; set; } = 2.0;
+public double ColourMultiplier { get; set; } = 0.5;
+public double ColourClosenessMultiplier { get; set; } = 2.0;
 
-        public bool IsMatch(byte red, byte green, byte blue)
-        {
-            return isBigger(red, green) && isBigger(red, blue) && areClose(blue, green);
-        }
+public bool IsMatch(byte red, byte green, byte blue)
+{
+    return isBigger(red, green) && isBigger(red, blue) && areClose(blue, green);
+}
 
-        private bool isBigger(byte red, byte other)
-        {
-            return (red * ColourMultiplier) > other;
-        }
+private bool isBigger(byte red, byte other)
+{
+    return (red * ColourMultiplier) > other;
+}
 
-        private bool areClose(byte color1, byte color2)
-        {
-            var max = Math.Max(color1, color2);
-            var min = Math.Min(color1, color2);
+private bool areClose(byte color1, byte color2)
+{
+    var max = Math.Max(color1, color2);
+    var min = Math.Min(color1, color2);
 
-            return min * ColourClosenessMultiplier > max - 20;
-        }
+    return min * ColourClosenessMultiplier > max - 20;
+}
 </pre>
 
 In the animation below which shows the Red value changing from 0 to 255 within a 2D square of all possible Blue and Green values, the algorithm matches the red colours within the white boundary. These are all the possible colours which it considers as being in the red feather.
