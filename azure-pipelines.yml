@@ -21,6 +21,10 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: GitVersion@4
+  inputs:
+    updateAssemblyInfo: true
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -32,3 +36,13 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+
