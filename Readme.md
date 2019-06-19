@@ -146,7 +146,7 @@ In the top right the amplitude of the bobber is shown in an animated graph ([lvc
 
 #### Colour Configuration Screen
 
-A second configuration screen allows the investigation of different paramters for the 'Red' pixel detection.
+A second configuration screen allows the investigation of different settings for the 'Red' pixel detection.
 
 ![Screenshot3](/post/img/FishingFun_Screenshot3.jpg)
 
