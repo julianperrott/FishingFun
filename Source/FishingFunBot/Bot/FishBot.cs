@@ -113,14 +113,11 @@ namespace FishingFun
             }
         }
 
-        private static void Loot(Point bobberPosition)
+        private  void Loot(Point bobberPosition)
         {
-            System.Windows.Forms.Cursor.Position = bobberPosition;
-
             Sleep(1500);
             logger.Info($"Right clicking mouse to Loot.");
-            WowProcess.RightClickMouse();
-            System.Windows.Forms.Cursor.Position = (new Point(200, 200));
+            WowProcess.RightClickMouse(logger, bobberPosition);
             Sleep(1000);
         }
 
