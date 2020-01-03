@@ -43,7 +43,7 @@
 
             <StackPanel Grid.Row="0">
                 <TextBlock TextWrapping="WrapWithOverflow" Name="LabelColourMultiplier" Text="Label goes here" />
-                <Slider Margin="20 0 00 10" Foreground="Blue" ValueChanged="ColourMultiplier_ValueChanged" Minimum="0" Maximum="100" Orientation="Horizontal" TickFrequency="20" Value="{Binding ColourMultiplier}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
+                <Slider Margin="20 0 00 10" Foreground="Blue" ValueChanged="ColourMultiplier_ValueChanged" Minimum="0" Maximum="300" Orientation="Horizontal" TickFrequency="20" Value="{Binding ColourMultiplier}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
             </StackPanel>
 
             <StackPanel Grid.Row="1">

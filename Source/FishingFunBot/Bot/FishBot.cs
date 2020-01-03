@@ -2,6 +2,7 @@
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
@@ -13,6 +14,7 @@ namespace FishingFun
         public static ILog logger = LogManager.GetLogger("Fishbot");
 
         private ConsoleKey castKey;
+        private List<ConsoleKey> tenMinKey;
         private IBobberFinder bobberFinder;
         private IBiteWatcher biteWatcher;
         private bool isEnabled;
@@ -20,11 +22,12 @@ namespace FishingFun
 
         public event EventHandler<FishingEvent> FishingEventHandler;
 
-        public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey)
+        public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey, List<ConsoleKey> tenMinKey)
         {
             this.bobberFinder = bobberFinder;
             this.biteWatcher = biteWatcher;
             this.castKey = castKey;
+            this.tenMinKey = tenMinKey;
 
             logger.Info("FishBot Created.");
         }
@@ -106,6 +109,7 @@ namespace FishingFun
                 if (this.biteWatcher.IsBite(currentBobberPosition))
                 {
                     Loot(bobberPosition);
+                    PressTenMinKey();
                     return;
                 }
 
@@ -113,7 +117,25 @@ namespace FishingFun
             }
         }
 
-        private  void Loot(Point bobberPosition)
+        private DateTime StartTime = DateTime.Now;
+
+        private void PressTenMinKey()
+        {
+            if ((DateTime.Now - StartTime).TotalMinutes > 10 && tenMinKey.Count > 0)
+            {
+                StartTime = DateTime.Now;
+                logger.Info($"Pressing key {tenMinKey} to run a macro.");
+
+                FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
+
+                foreach (var key in tenMinKey)
+                {
+                    WowProcess.PressKey(key);
+                }
+            }
+        }
+
+        private void Loot(Point bobberPosition)
         {
             Sleep(1500);
             logger.Info($"Right clicking mouse to Loot.");

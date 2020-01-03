@@ -7,5 +7,7 @@
         double ColourMultiplier { get; set; }
 
         double ColourClosenessMultiplier { get; set; }
+
+        void SetConfiguration(bool isWowClasic);
     }
 }

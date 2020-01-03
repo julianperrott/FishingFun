@@ -12,7 +12,7 @@ namespace FishingFun
 
         public static Bitmap GetBitmap()
         {
-            var bmpScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
+            var bmpScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width / 2, (Screen.PrimaryScreen.Bounds.Height / 2)-100);
             var graphics = Graphics.FromImage(bmpScreen);
             graphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4, 0, 0, bmpScreen.Size);
             graphics.Dispose();

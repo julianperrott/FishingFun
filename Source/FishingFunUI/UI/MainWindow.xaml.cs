@@ -4,6 +4,7 @@
     using log4net.Core;
     using log4net.Repository.Hierarchy;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Timers;
     using System.Windows;
@@ -33,6 +34,8 @@
 
             this.DataContext = LogEntries = new ObservableCollection<LogEntry>();
             this.pixelClassifier = new PixelClassifier();
+            pixelClassifier.SetConfiguration(WowProcess.IsWowClassic());
+             
             this.bobberFinder = new SearchBobberFinder(pixelClassifier);
 
             var imageProvider = bobberFinder as IImageProvider;
@@ -144,6 +147,9 @@
         {
             if (bot == null)
             {
+                WowProcess.PressKey(ConsoleKey.Spacebar);
+                System.Threading.Thread.Sleep(1500);
+
                 SetButtonStates(false);
                 botThread = new System.Threading.Thread(new System.Threading.ThreadStart(this.BotThread));
                 botThread.Start();
@@ -157,7 +163,7 @@
 
         public void BotThread()
         {
-            bot = new FishingBot(bobberFinder, this.biteWatcher, KeyChooser.CastKey);
+            bot = new FishingBot(bobberFinder, this.biteWatcher, KeyChooser.CastKey, new List<ConsoleKey> { ConsoleKey.D5, ConsoleKey.D6 });
             bot.FishingEventHandler += FishingEventHandler;
             bot.Start();
 

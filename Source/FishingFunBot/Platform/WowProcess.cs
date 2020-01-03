@@ -10,15 +10,22 @@ namespace FishingFun
 {
     public static class WowProcess
     {
+        public static ILog logger = LogManager.GetLogger("Fishbot");
+
         private const UInt32 WM_KEYDOWN = 0x0100;
         private const UInt32 WM_KEYUP = 0x0101;
         private static ConsoleKey lastKey;
         private static Random random = new Random();
 
+        public static bool IsWowClassic()
+        {
+            return Get().ProcessName.ToLower().Contains("classic");
+        }
+
         //Get the wow-process, if success returns the process else null
         public static Process Get(string name = "")
         {
-            var names = string.IsNullOrEmpty(name) ? new List<string> { "Wow", "Wow-64" } : new List<string> { name };
+            var names = string.IsNullOrEmpty(name) ? new List<string> { "Wow", "WowClassic", "Wow-64" } : new List<string> { name };
 
             var processList = Process.GetProcesses();
             foreach (var p in processList)
@@ -29,11 +36,13 @@ namespace FishingFun
                 }
             }
 
+            logger.Error($"Failed to find the wow process, tried: {string.Join(", ", names)}");
+
             return null;
         }
 
         [DllImport("user32.dll")]
-        private static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
+        public static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
@@ -86,6 +95,18 @@ namespace FishingFun
 
             RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
 
+        }
+
+        public static void RightClickMouse()
+        {
+            var activeProcess = GetActiveProcess();
+            var wowProcess = WowProcess.Get();
+
+            var oldPosition = System.Windows.Forms.Cursor.Position;
+
+            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
+            Thread.Sleep(30 + random.Next(0, 47));
+            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
         }
 
         private static void RefocusOnOldScreen(ILog logger, Process activeProcess, Process wowProcess, System.Drawing.Point oldPosition)

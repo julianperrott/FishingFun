@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,6 +10,8 @@ namespace FishingFun
     public class SearchBobberFinder : IBobberFinder, IImageProvider
     {
         private readonly IPixelClassifier pixelClassifier;
+
+        private static ILog logger = LogManager.GetLogger("Fishbot");
 
         private Point previousLocation;
 
@@ -81,6 +84,12 @@ namespace FishingFun
             {
                 var prevText = hasPreviousLocation ? " using previous location" : "";
                 Debug.WriteLine($"Red points found: {points.Count} in {sw.ElapsedMilliseconds}{prevText}.");
+            }
+
+            if (points.Count>1000)
+            {
+                logger.Error("Error: Too much red in this image, adjust the configuration !");
+                points.Clear();
             }
 
             return points;
