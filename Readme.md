@@ -7,7 +7,7 @@ In World of Warcraft, Fishing is a time consuming task which is simple and so le
 
 Fishing is a way to catch fish which can be used to cook food, which is used to heal or increase the stats of your character. You can also gain achievements through fishing. 
 
-The machanics of fishing involve casting your line into in-land or sea waters and then waiting up to 30 seconds for a bite, then clicking to loot within a couple of seconds to catch the fish.
+The mechanics of fishing involve casting your line into in-land or sea waters and then waiting up to 30 seconds for a bite, then clicking to loot within a couple of seconds to catch the fish.
 
 ## Video of the bot in action
 
@@ -29,7 +29,7 @@ Or compile the source and run it from visual studio.
 * Zoom in completely so your character is not visible.
 * Make sure the fishing float is in the middle of the screen.
 * Fish at ground level, not off docks or other high places.
-* It required WOW is running on the primary screen. It needs the wow screen to be on top. So it probably won't work well if you only have one screen.
+* It requires that WOW is running on the primary screen. It needs the wow screen to be on top. So it probably won't work well if you only have one screen.
 
 ----
 
