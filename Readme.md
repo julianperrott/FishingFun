@@ -23,7 +23,8 @@ Or compile the source and run it from visual studio.
 
 ## Bot Running Instructions
 
-* Enable 'Autoloot'
+* Enable 'Autoloot' (Esc, Interface Options, Controls, Check Autoloot)
+* Turn off Click to move (Esc, Interface Options, Mouse, Uncheck Click to move)
 * Make sure 'Right Click' loots.
 * Put the cast fishing Button on poistion 4 of your Action Bar. I.e. when 4 is clicked fishing will cast.
 * Zoom in completely so your character is not visible.
