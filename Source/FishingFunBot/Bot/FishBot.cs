@@ -30,6 +30,8 @@ namespace FishingFun
             this.tenMinKey = tenMinKey;
 
             logger.Info("FishBot Created.");
+
+            FishingEventHandler += (s, e) => { };
         }
 
         public void Start()

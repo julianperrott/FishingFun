@@ -25,6 +25,11 @@ namespace FishingFun
             public int X;
             public int Y;
             public int index;
+
+            public Fish(Image image)
+            {
+                this.image = image;
+            }
         }
 
         public FlyingFishAnimation()
@@ -63,9 +68,8 @@ namespace FishingFun
 
         private Fish CreateFish(Random r, int i)
         {
-            var fish = new Fish
-            {
-                image = new Image
+            var fish = new Fish(
+                new Image
                 {
                     Source = this.FishImage.Source,
                     Height = 100,
@@ -73,7 +77,8 @@ namespace FishingFun
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Visibility = Visibility.Collapsed
-                },
+                })
+            {
                 rotationAngle = r.Next(359),
                 rotationStep = 30 - r.Next(60),
                 speedY = (r.Next(30) + 30),

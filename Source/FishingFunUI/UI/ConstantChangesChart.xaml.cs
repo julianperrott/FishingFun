@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 
+#nullable enable
 namespace FishingFun
 {
     public class MeasureModel
@@ -151,9 +152,9 @@ namespace FishingFun
 
         #region INotifyPropertyChanged implementation
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));

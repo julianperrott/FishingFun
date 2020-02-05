@@ -6,11 +6,12 @@ namespace FishingFun
     public class BobberColourPointFinder : IBobberFinder, IImageProvider
     {
         private Color targetColor;
-        private Bitmap bmp;
+        private Bitmap bmp = new Bitmap(1, 1);
 
         public BobberColourPointFinder(Color targetColor)
         {
             this.targetColor = targetColor;
+            BitmapEvent += (s, e) => { };
         }
 
         public event EventHandler<BobberBitmapEvent> BitmapEvent;

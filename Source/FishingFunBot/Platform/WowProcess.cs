@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
+#nullable enable
 namespace FishingFun
 {
     public static class WowProcess
@@ -19,11 +20,12 @@ namespace FishingFun
 
         public static bool IsWowClassic()
         {
-            return Get().ProcessName.ToLower().Contains("classic");
+            var wowProcess = Get();
+            return wowProcess != null ? wowProcess.ProcessName.ToLower().Contains("classic") : false; ;
         }
 
         //Get the wow-process, if success returns the process else null
-        public static Process Get(string name = "")
+        public static Process? Get(string name = "")
         {
             var names = string.IsNullOrEmpty(name) ? new List<string> { "Wow", "WowClassic", "Wow-64" } : new List<string> { name };
 
@@ -61,7 +63,11 @@ namespace FishingFun
         private static void KeyDown(ConsoleKey key)
         {
             lastKey = key;
-            PostMessage(Get().MainWindowHandle, WM_KEYDOWN, (int)key, 0);
+            var wowProcess = Get();
+            if (wowProcess != null)
+            {
+                PostMessage(wowProcess.MainWindowHandle, WM_KEYDOWN, (int)key, 0);
+            }
         }
 
         private static void KeyUp()
@@ -78,35 +84,41 @@ namespace FishingFun
 
         public static void KeyUp(ConsoleKey key)
         {
-            PostMessage(Get().MainWindowHandle, WM_KEYUP, (int)key, 0);
+            var wowProcess = Get();
+            if (wowProcess != null)
+            {
+                PostMessage(wowProcess.MainWindowHandle, WM_KEYUP, (int)key, 0);
+            }
         }
 
         public static void RightClickMouse(ILog logger, System.Drawing.Point position)
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
+            if (wowProcess != null)
+            {
+                var oldPosition = System.Windows.Forms.Cursor.Position;
 
-            var oldPosition = System.Windows.Forms.Cursor.Position;
+                System.Windows.Forms.Cursor.Position = position;
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
+                Thread.Sleep(30 + random.Next(0, 47));
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
 
-            System.Windows.Forms.Cursor.Position = position;
-            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
-            Thread.Sleep(30 + random.Next(0, 47));
-            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
-
-            RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
-
+                RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
+            }
         }
 
         public static void RightClickMouse()
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
-
-            var oldPosition = System.Windows.Forms.Cursor.Position;
-
-            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
-            Thread.Sleep(30 + random.Next(0, 47));
-            PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
+            if (wowProcess != null)
+            {
+                var oldPosition = System.Windows.Forms.Cursor.Position;
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
+                Thread.Sleep(30 + random.Next(0, 47));
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
+            }
         }
 
         private static void RefocusOnOldScreen(ILog logger, Process activeProcess, Process wowProcess, System.Drawing.Point oldPosition)

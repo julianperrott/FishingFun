@@ -15,6 +15,8 @@ namespace FishingFun
 
         public KeyBindChooser()
         {
+            CastKeyChanged += (s, e) => { };
+
             InitializeComponent();
             ReadConfiguration();
         }

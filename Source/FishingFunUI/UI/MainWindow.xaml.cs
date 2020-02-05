@@ -1,4 +1,5 @@
-﻿namespace FishingFun
+﻿#nullable enable
+namespace FishingFun
 {
     using log4net.Appender;
     using log4net.Core;
@@ -20,11 +21,11 @@
         private IBiteWatcher biteWatcher;
         private ReticleDrawer reticleDrawer = new ReticleDrawer();
 
-        private FishingBot bot;
+        private FishingBot? bot;
         private int strikeValue = 7; // this is the depth the bobber must go for the bite to be detected
         private bool setImageBackgroundColour = true;
         private Timer WindowSizeChangedTimer;
-        private System.Threading.Thread botThread;
+        private System.Threading.Thread? botThread;
 
         public MainWindow()
         {

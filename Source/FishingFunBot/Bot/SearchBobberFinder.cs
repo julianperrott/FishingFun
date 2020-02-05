@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
+#nullable enable
 namespace FishingFun
 {
     public class SearchBobberFinder : IBobberFinder, IImageProvider
@@ -15,13 +16,14 @@ namespace FishingFun
 
         private Point previousLocation;
 
-        private Bitmap bitmap;
+        private Bitmap bitmap = new Bitmap(1, 1);
 
         public event EventHandler<BobberBitmapEvent> BitmapEvent;
 
         public SearchBobberFinder(IPixelClassifier pixelClassifier)
         {
             this.pixelClassifier = pixelClassifier;
+            BitmapEvent += (s, e) => { };
         }
 
         public void Reset()
@@ -33,7 +35,7 @@ namespace FishingFun
         {
             this.bitmap = WowScreen.GetBitmap();
 
-            Score best = Score.ScorePoints(FindRedPoints());
+            Score? best = Score.ScorePoints(FindRedPoints());
 
             if (previousLocation != Point.Empty && best == null)
             {
@@ -113,7 +115,7 @@ namespace FishingFun
             public Point point;
             public int count = 0;
 
-            public static Score ScorePoints(List<Score> points)
+            public static Score? ScorePoints(List<Score> points)
             {
                 foreach (Score p in points)
                 {

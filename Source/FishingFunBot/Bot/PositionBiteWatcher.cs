@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
+#nullable enable
 namespace FishingFun
 {
     public class PositionBiteWatcher : IBiteWatcher
@@ -12,9 +13,9 @@ namespace FishingFun
         private List<int> yPositions = new List<int>();
         private int strikeValue;
         private int yDiff;
-        private TimedAction timer;
+        private TimedAction? timer;
 
-        public Action<FishingEvent> FishingEventHandler { set; get; }
+        public Action<FishingEvent> FishingEventHandler { set; get; } = (e)=> { };
 
         public PositionBiteWatcher(int strikeValue)
         {
@@ -50,12 +51,18 @@ namespace FishingFun
 
             bool thresholdReached = yDiff <= -strikeValue;
 
-            timer.ExecuteIfDue();
+            if (timer != null)
+            {
+                timer.ExecuteIfDue();
+            }
 
             if (thresholdReached)
             {
                 RaiseEvent(new FishingEvent { Action = FishingAction.Loot });
-                timer.ExecuteNow();
+                if (timer != null)
+                {
+                    timer.ExecuteNow();
+                }
                 return true;
             }
 

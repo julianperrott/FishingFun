@@ -9,7 +9,7 @@ namespace FishingFun
     {
         private readonly IPixelClassifier pixelClassifier;
 
-        private Bitmap ScreenCapture;
+        private Bitmap ScreenCapture = new Bitmap(1, 1);
 
         public int RedValue { get; set; }
 
