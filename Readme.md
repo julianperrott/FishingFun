@@ -17,9 +17,7 @@ The mechanics of fishing involve casting your line into in-land or sea waters an
 
 * Requires: Dot net framework 4.7
 https://dotnet.microsoft.com/download/dotnet-framework
-* The bot: [FishingFun.zip](https://github.com/julianperrott/FishingFun/raw/master/FishingFun.zip "Zip File")
-
-Or compile the source and run it from visual studio.
+* The bot: Compile the source and run it from visual studio.
 
 ## Bot Running Instructions
 
