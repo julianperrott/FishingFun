@@ -19,6 +19,7 @@ namespace FishingFun
         private IBiteWatcher biteWatcher;
         private bool isEnabled;
         private Stopwatch stopwatch = new Stopwatch();
+        private static Random random = new Random();
 
         public event EventHandler<FishingEvent> FishingEventHandler;
 
@@ -40,11 +41,15 @@ namespace FishingFun
 
             isEnabled = true;
 
+            DoTenMinuteKey();
+
             while (isEnabled)
             {
                 try
                 {
                     logger.Info($"Pressing key {castKey} to Cast.");
+
+                    PressTenMinKeyIfDue();
 
                     FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
                     WowProcess.PressKey(castKey);
@@ -56,7 +61,7 @@ namespace FishingFun
                 catch (Exception e)
                 {
                     logger.Error(e.ToString());
-                    Thread.Sleep(2000);
+                    Sleep(2000);
                 }
             }
 
@@ -111,7 +116,7 @@ namespace FishingFun
                 if (this.biteWatcher.IsBite(currentBobberPosition))
                 {
                     Loot(bobberPosition);
-                    PressTenMinKey();
+                    PressTenMinKeyIfDue();
                     return;
                 }
 
@@ -121,19 +126,33 @@ namespace FishingFun
 
         private DateTime StartTime = DateTime.Now;
 
-        private void PressTenMinKey()
+        private void PressTenMinKeyIfDue()
         {
-            if ((DateTime.Now - StartTime).TotalMinutes > 10 && tenMinKey.Count > 0)
+            if ((DateTime.Now - StartTime).TotalMinutes > 1 && tenMinKey.Count > 0)
             {
-                StartTime = DateTime.Now;
-                logger.Info($"Pressing key {tenMinKey} to run a macro.");
+                DoTenMinuteKey();
+            }
+        }
 
-                FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
+        /// <summary>
+        /// Ten minute key can do anything you want e.g.
+        /// Macro to apply a lure: 
+        /// /use Bright Baubles
+        /// /use 16
+        /// 
+        /// Or a macro to delete junk:
+        /// /run for b=0,4 do for s=1,GetContainerNumSlots(b) do local n=GetContainerItemLink(b,s) if n and (strfind(n,"Raw R") or strfind(n,"Raw Spot") or strfind(n,"Raw Glo") or strfind(n,"roup")) then PickupContainerItem(b,s) DeleteCursorItem() end end end
+        /// </summary>
+        private void DoTenMinuteKey()
+        {
+            StartTime = DateTime.Now;
+            logger.Info($"Pressing key {tenMinKey} to run a macro.");
 
-                foreach (var key in tenMinKey)
-                {
-                    WowProcess.PressKey(key);
-                }
+            FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
+
+            foreach (var key in tenMinKey)
+            {
+                WowProcess.PressKey(key);
             }
         }
 
@@ -147,12 +166,13 @@ namespace FishingFun
 
         public static void Sleep(int ms)
         {
+            ms+=random.Next(0, 225);
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (sw.Elapsed.TotalMilliseconds < ms)
             {
                 FlushBuffers();
-                //System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new ThreadStart(delegate { }));
                 Thread.Sleep(100);
             }
         }

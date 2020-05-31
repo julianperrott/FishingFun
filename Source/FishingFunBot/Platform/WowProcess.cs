@@ -91,6 +91,10 @@ namespace FishingFun
             }
         }
 
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetCursorPos(int x, int y);
+
         public static void RightClickMouse(ILog logger, System.Drawing.Point position)
         {
             var activeProcess = GetActiveProcess();
@@ -99,7 +103,14 @@ namespace FishingFun
             {
                 var oldPosition = System.Windows.Forms.Cursor.Position;
 
-                System.Windows.Forms.Cursor.Position = position;
+
+                for(int i=20;i>0;i--)
+                {
+                    SetCursorPos(position.X + i, position.Y + i);
+                    Thread.Sleep(1);
+                }
+                Thread.Sleep(100);
+
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
                 Thread.Sleep(30 + random.Next(0, 47));
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
@@ -118,6 +129,19 @@ namespace FishingFun
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
                 Thread.Sleep(30 + random.Next(0, 47));
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
+            }
+        }
+
+        public static void LeftClickMouse()
+        {
+            var activeProcess = GetActiveProcess();
+            var wowProcess = WowProcess.Get();
+            if (wowProcess != null)
+            {
+                var oldPosition = System.Windows.Forms.Cursor.Position;
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONDOWN, Keys.VK_RMB, 0);
+                Thread.Sleep(30 + random.Next(0, 47));
+                PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONUP, Keys.VK_RMB, 0);
             }
         }
 

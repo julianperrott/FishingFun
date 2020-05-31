@@ -27,8 +27,9 @@ https://dotnet.microsoft.com/download/dotnet-framework
 * Put the cast fishing Button on poistion 4 of your Action Bar. I.e. when 4 is clicked fishing will cast.
 * Zoom in completely so your character is not visible.
 * Make sure the fishing float is in the middle of the screen.
-* Fish at ground level, not off docks or other high places.
-* It requires that WOW is running on the primary screen. It needs the wow screen to be on top. So it probably won't work well if you only have one screen.
+* Fish at close to ground level as you can, not off docks or other high places.
+* It requires that WOW is running Full screen (not windowed) on the primary screen. It needs the wow screen to be on top. So it probably won't work well if you only have one screen. If you need it windowed then I suggest you look at the code in this fork: https://github.com/petrvecera/FishingFun
+* Sometimes you may need to adjust the colour parameters for the bobber finder, such as during evening time or if there is a lot of red in the landscape.
 
 ----
 
