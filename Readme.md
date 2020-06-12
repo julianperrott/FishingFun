@@ -11,7 +11,7 @@ The mechanics of fishing involve casting your line into in-land or sea waters an
 
 ## Video of the bot in action
 
-[![Fishing Fun YouTube](https://img.youtube.com/vi/aWyqY7KFTtw/0.jpg)](https://www.youtube.com/watch?v=aWyqY7KFTtw)
+[![Fishing Fun YouTube](https://img.youtube.com/vi/T6reHXxA5f0/0.jpg)](https://www.youtube.com/watch?v=T6reHXxA5f0)
 
 ## Install
 
