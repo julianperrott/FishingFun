@@ -15,7 +15,7 @@ https://www.youtube.com/watch?v=T6reHXxA5f0
 
 [![Fishing Fun YouTube](https://img.youtube.com/vi/T6reHXxA5f0/0.jpg)](https://www.youtube.com/watch?v=T6reHXxA5f0)
 
-## Install
+## Build
 
 * Requires: Dot net framework 4.7
 https://dotnet.microsoft.com/download/dotnet-framework
