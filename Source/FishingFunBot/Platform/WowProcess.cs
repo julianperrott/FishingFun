@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 
 #nullable enable
+
 namespace FishingFun
 {
     public static class WowProcess
@@ -47,12 +47,12 @@ namespace FishingFun
         public static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint ProcessId);
 
-        static Process GetActiveProcess()
+        private static Process GetActiveProcess()
         {
             IntPtr hwnd = GetForegroundWindow();
             uint pid;
@@ -97,14 +97,19 @@ namespace FishingFun
 
         public static void RightClickMouse(ILog logger, System.Drawing.Point position)
         {
+            //RightClickMouse_Original(logger, position);
+            RightClickMouse_LiamCooper(logger, position);
+        }
+
+        public static void RightClickMouse_Original(ILog logger, System.Drawing.Point position)
+        {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
             if (wowProcess != null)
             {
                 var oldPosition = System.Windows.Forms.Cursor.Position;
 
-
-                for(int i=20;i>0;i--)
+                for (int i = 20; i > 0; i--)
                 {
                     SetCursorPos(position.X + i, position.Y + i);
                     Thread.Sleep(1);
@@ -145,6 +150,22 @@ namespace FishingFun
             }
         }
 
+        public static void RightClickMouse_LiamCooper(ILog logger, System.Drawing.Point position)
+        {
+            var activeProcess = GetActiveProcess();
+            var wowProcess = WowProcess.Get();
+            if (wowProcess != null)
+            {
+                var oldPosition = System.Windows.Forms.Cursor.Position;
+
+                System.Windows.Forms.Cursor.Position = position;
+                mouse_event((int)MouseEventFlags.RightDown, position.X, position.Y, 0, 0);
+                Thread.Sleep(30 + random.Next(0, 47));
+                mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);
+                RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
+            }
+        }
+
         private static void RefocusOnOldScreen(ILog logger, Process activeProcess, Process wowProcess, System.Drawing.Point oldPosition)
         {
             try
@@ -163,10 +184,26 @@ namespace FishingFun
                     System.Windows.Forms.Cursor.Position = oldPosition;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Error(ex.Message);
             }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+
+        [Flags]
+        public enum MouseEventFlags
+        {
+            LeftDown = 0x00000002,
+            LeftUp = 0x00000004,
+            MiddleDown = 0x00000020,
+            MiddleUp = 0x00000040,
+            Move = 0x00000001,
+            Absolute = 0x00008000,
+            RightDown = 0x00000008,
+            RightUp = 0x00000010
         }
     }
 }
