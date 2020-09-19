@@ -20,7 +20,7 @@ namespace Powershell
             var bobberFinder = new SearchBobberFinder(pixelClassifier);
             var biteWatcher = new PositionBiteWatcher(strikeValue);
 
-            var bot = new FishingBot(bobberFinder, biteWatcher, ConsoleKey.D4, new List<ConsoleKey> { });
+            var bot = new FishingBot(bobberFinder, biteWatcher, ConsoleKey.D4, new List<ConsoleKey> { ConsoleKey.D5 });
             bot.FishingEventHandler += (b, e) => LogManager.GetLogger("Fishbot").Info(e);
 
             WowProcess.PressKey(ConsoleKey.Spacebar);

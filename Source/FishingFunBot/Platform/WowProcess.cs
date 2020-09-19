@@ -114,7 +114,7 @@ namespace FishingFun
                     SetCursorPos(position.X + i, position.Y + i);
                     Thread.Sleep(1);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
 
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
                 Thread.Sleep(30 + random.Next(0, 47));
@@ -159,6 +159,7 @@ namespace FishingFun
                 var oldPosition = System.Windows.Forms.Cursor.Position;
 
                 System.Windows.Forms.Cursor.Position = position;
+                Thread.Sleep(1000);
                 mouse_event((int)MouseEventFlags.RightDown, position.X, position.Y, 0, 0);
                 Thread.Sleep(30 + random.Next(0, 47));
                 mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);

@@ -146,20 +146,25 @@ namespace FishingFun
         private void DoTenMinuteKey()
         {
             StartTime = DateTime.Now;
-            logger.Info($"Pressing key {tenMinKey} to run a macro.");
+
+            if (tenMinKey.Count == 0)
+            {
+                logger.Info($"Ten Minute Key:  No keys defined in tenMinKey, so nothing to do (Define in call to FishingBot constructor).");
+            }
 
             FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
 
             foreach (var key in tenMinKey)
             {
+                logger.Info($"Ten Minute Key: Pressing key {key} to run a macro, delete junk fish or apply a lure etc.");
                 WowProcess.PressKey(key);
             }
         }
 
         private void Loot(Point bobberPosition)
         {
-            Sleep(1500);
             logger.Info($"Right clicking mouse to Loot.");
+            Sleep(1000);
             WowProcess.RightClickMouse(logger, bobberPosition);
             Sleep(1000);
         }
