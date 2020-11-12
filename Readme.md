@@ -29,7 +29,9 @@ You will need to install Visual Studio, get it here: https://visualstudio.micros
 
 Requires: Dot net framework 4.7 https://dotnet.microsoft.com/download/dotnet-framework, this should automatically be installed with visual studio.
 
-## 3. Double click on the solution file to open it: "C:\FishingFun\source\FishingFun.sln", or open it from visual studio.
+## 3. Build and run the Bot
+
+Double click on the solution file to open it: "C:\FishingFun\source\FishingFun.sln", or open it from visual studio.
 
 Once loaded click the Start button, this should build and run the project FishingFun.UI. Alternatively use F5 or menu 'Debug -> Start Debugging'.
 
