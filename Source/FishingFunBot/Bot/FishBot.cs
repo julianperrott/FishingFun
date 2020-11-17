@@ -164,9 +164,7 @@ namespace FishingFun
         private void Loot(Point bobberPosition)
         {
             logger.Info($"Right clicking mouse to Loot.");
-            Sleep(1000);
             WowProcess.RightClickMouse(logger, bobberPosition);
-            Sleep(1000);
         }
 
         public static void Sleep(int ms)

@@ -9,5 +9,7 @@
         double ColourClosenessMultiplier { get; set; }
 
         void SetConfiguration(bool isWowClasic);
+
+        PixelClassifier.ClassifierMode Mode { get; set; }
     }
 }

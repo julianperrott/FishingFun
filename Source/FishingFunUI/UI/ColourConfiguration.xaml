@@ -23,9 +23,9 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Content="Red:" />
+            <Label x:Name="ColourLabel" Grid.Column="0" Grid.Row="0" Content="Red:" />
             <Label Name="LabelRed" Grid.Column="0" Grid.Row="1" Content="123" />
-            <Slider Grid.Column="0" Grid.Row="2" Margin="5,0,0,0" Foreground="Blue" Minimum="0" ValueChanged="Red_ValueChanged" Maximum="255" Orientation="Vertical" TickFrequency="20" Value="{Binding RedValue}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
+            <Slider Grid.Column="0" Grid.Row="2" Margin="5,0,0,0" Foreground="Blue" Minimum="0" ValueChanged="FindColour_ValueChanged" Maximum="255" Orientation="Vertical" TickFrequency="20" Value="{Binding FindColourValue}" Thumb.DragCompleted="Slider_DragCompleted" TickPlacement="BottomRight" />
 
             <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Name="ColourDisplay" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Chrome;component/Resources/FishingFun.png" />
         </Grid>
@@ -53,6 +53,27 @@
         </Grid>
 
         <!-- Bottom Right Button -->
-        <Button Click="Capture_Click" Content="Capture Screen" Grid.Column="2" Grid.Row="1" Width="150" Height="30" Margin="123,42,123,43" />
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Button Click="Capture_Click" Content="Capture Screen"  Width="150" Height="30" Margin="123,20,123,10" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Label Margin="0 11 0 0">Watch Feather:</Label>
+                <ComboBox Name="cmbColors" SelectionChanged="cmbColors_SelectionChanged" Width="100" Margin="10 0 0 0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Margin="0 11 0 0">Loot Delay:</Label>
+                <Slider x:Name="LootDelay" Width="100" Margin="0 11 0 0" Foreground="Blue" ValueChanged="LootDelay_ValueChanged" Minimum="0" Maximum="3500" Orientation="Horizontal" TickFrequency="500" Value="{Binding LootDelay}" TickPlacement="BottomRight" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

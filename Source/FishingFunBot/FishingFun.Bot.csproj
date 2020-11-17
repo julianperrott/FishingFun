@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot\BobberColourPointFinder.cs" />
+    <Compile Include="Bot\ClassifierMode.cs" />
     <Compile Include="Bot\FishBot.cs" />
     <Compile Include="Bot\Interfaces\IBiteWatcher.cs" />
     <Compile Include="Bot\Interfaces\IBobberFinder.cs" />

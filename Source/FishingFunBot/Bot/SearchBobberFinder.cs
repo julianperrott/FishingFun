@@ -106,7 +106,7 @@ namespace FishingFun
             if (isMatch)
             {
                 points.Add(new Score { point = new Point(x, y) });
-                this.bitmap.SetPixel(x, y, Color.Red);
+                this.bitmap.SetPixel(x, y, this.pixelClassifier.Mode == PixelClassifier.ClassifierMode.Blue ? Color.Blue : Color.Red);
             }
         }
 
