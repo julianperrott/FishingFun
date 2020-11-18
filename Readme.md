@@ -53,6 +53,17 @@ If you want run a version without a GUI you need to set the startup project in v
 
 ----
 
+## Fishing in Lava
+
+To get the 'Fire Ammonite Angler' achievement you need to fish in Lava. Lava is red making it impossible to see the red feather, so you need to switch to the blue feather. On the main page click the orange configuration button, then change the 'Watch Feather' combo from Red to 'Blue'
+
+Use a macro like this on your fishing key:
+
+        /use Fire Ammonite Bait
+        /cast Fishing
+
+![Fishing in Lava](/post/img/lava.png)
+
 ## All about the bot
 
 ### To catch fish, what would a bot have to do ?
