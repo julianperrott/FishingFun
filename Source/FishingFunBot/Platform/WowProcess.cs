@@ -17,7 +17,7 @@ namespace FishingFun
         private const UInt32 WM_KEYUP = 0x0101;
         private static ConsoleKey lastKey;
         private static Random random = new Random();
-        public static int LootDelay=2500;
+        public static int LootDelay=2000;
 
 
         public static bool IsWowClassic()
