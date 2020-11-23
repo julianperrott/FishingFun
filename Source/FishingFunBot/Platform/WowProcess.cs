@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -34,7 +35,7 @@ namespace FishingFun
             var processList = Process.GetProcesses();
             foreach (var p in processList)
             {
-                if (names.Contains(p.ProcessName))
+                if (names.Select(s => s.ToLower()).Contains(p.ProcessName.ToLower()))
                 {
                     return p;
                 }
