@@ -128,7 +128,7 @@ namespace FishingFun
 
         private void PressTenMinKeyIfDue()
         {
-            if ((DateTime.Now - StartTime).TotalMinutes > 1 && tenMinKey.Count > 0)
+            if ((DateTime.Now - StartTime).TotalMinutes > 10 && tenMinKey.Count > 0)
             {
                 DoTenMinuteKey();
             }
