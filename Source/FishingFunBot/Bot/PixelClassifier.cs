@@ -3,7 +3,7 @@ using System;
 
 namespace FishingFun
 {
-    public class PixelClassifier : IPixelClassifier
+    public partial class PixelClassifier : IPixelClassifier
     {
         private static ILog logger = LogManager.GetLogger("Fishbot");
 
@@ -12,8 +12,17 @@ namespace FishingFun
 
         public bool IsMatch(byte red, byte green, byte blue)
         {
-            return isBigger(red, green) && isBigger(red, blue) && areClose(blue, green);
+            if (Mode == ClassifierMode.Red)
+            {
+                return isBigger(red, green) && isBigger(red, blue) && areClose(blue, green);
+            }
+            else
+            {
+                return isBigger(blue, green) && isBigger(blue, red) && areClose(red, green);
+            }
         }
+
+        public ClassifierMode Mode { get; set; } = ClassifierMode.Red;
 
         public void SetConfiguration(bool isWowClasic)
         {

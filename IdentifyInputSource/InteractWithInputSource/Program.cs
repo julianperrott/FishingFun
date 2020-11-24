@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Interceptor;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace InteractWithInputSource
@@ -44,7 +46,49 @@ namespace InteractWithInputSource
 
             while(true)
             {
+                var input = new Input();
+                input.Load();
+
                 await Task.Delay(4000);
+
+
+                //input.MoveMouseTo(5, 5);  // Please note this doesn't use the driver to move the mouse; it uses System.Windows.Forms.Cursor.Position
+                //input.MoveMouseBy(25, 25); //  Same as above ^
+                //input.SendLeftClick();
+
+
+                //Console.WriteLine("Press X using keybd_event");
+                //keybd_event((byte)ConsoleKey.X.GetHashCode(), 0, (uint)keyState.KEYDOWN, (UIntPtr)0);
+                //await Task.Delay(1000);
+                //keybd_event((byte)ConsoleKey.X.GetHashCode(), 0, (uint)keyState.KEYUP, (UIntPtr)0);
+                //await Task.Delay(4000);
+
+                Console.WriteLine("Sedning input");
+                input.KeyPressDelay = 1; // See below for explanation; not necessary in non-game apps
+                input.SendKeys(Keys.O);  // Presses the ENTER key down and then up (this constitutes a key press)
+                input.Unload();
+
+                // Or you can do the same thing above using these two lines of code
+                input.SendKey(Keys.Enter, KeyState.Down);
+                Thread.Sleep(1); // For use in games, be sure to sleep the thread so the game can capture all events. A lagging game cannot process input quickly, and you so you may have to adjust this to as much as 40 millisecond delay. Outside of a game, a delay of even 0 milliseconds can work (instant key presses).
+                input.SendKey(Keys.Enter, KeyState.Up);
+
+                input.SendText("hello, I am typing!");
+
+                /* All these following characters / numbers / symbols work */
+                input.SendText("abcdefghijklmnopqrstuvwxyz");
+                input.SendText("1234567890");
+                input.SendText("!@#$%^&*()");
+                input.SendText("[]\\;',./");
+                input.SendText("{}|:\"<>?");
+
+
+                // And finally
+                input.Unload();
+                Console.WriteLine("Sent input");
+                await Task.Delay(40000);
+
+
 
                 Console.WriteLine("Position cursor at 200,200 using System.Windows.Forms.Cursor.Position");
                 System.Windows.Forms.Cursor.Position = new System.Drawing.Point(200, 200);

@@ -1,6 +1,7 @@
 ﻿using FishingFun;
 using log4net;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,6 +16,12 @@ namespace Powershell
             int strikeValue = 7;
 
             var pixelClassifier = new PixelClassifier();
+            if (args.Contains("blue"))
+            {
+                Console.WriteLine("Blue mode");
+                pixelClassifier.Mode = PixelClassifier.ClassifierMode.Blue;
+            }
+
             pixelClassifier.SetConfiguration(WowProcess.IsWowClassic());
 
             var bobberFinder = new SearchBobberFinder(pixelClassifier);

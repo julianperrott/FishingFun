@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -17,6 +18,8 @@ namespace FishingFun
         private const UInt32 WM_KEYUP = 0x0101;
         private static ConsoleKey lastKey;
         private static Random random = new Random();
+        public static int LootDelay=2000;
+
 
         public static bool IsWowClassic()
         {
@@ -32,7 +35,7 @@ namespace FishingFun
             var processList = Process.GetProcesses();
             foreach (var p in processList)
             {
-                if (names.Contains(p.ProcessName))
+                if (names.Select(s => s.ToLower()).Contains(p.ProcessName.ToLower()))
                 {
                     return p;
                 }
@@ -156,14 +159,17 @@ namespace FishingFun
             var wowProcess = WowProcess.Get();
             if (wowProcess != null)
             {
+                mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);
                 var oldPosition = System.Windows.Forms.Cursor.Position;
 
+                Thread.Sleep(200);
                 System.Windows.Forms.Cursor.Position = position;
-                Thread.Sleep(1000);
+                Thread.Sleep(LootDelay);
                 mouse_event((int)MouseEventFlags.RightDown, position.X, position.Y, 0, 0);
                 Thread.Sleep(30 + random.Next(0, 47));
                 mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);
                 RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
+                Thread.Sleep(LootDelay / 2);
             }
         }
 

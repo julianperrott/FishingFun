@@ -85,12 +85,12 @@ namespace FishingFun
             if (sw.ElapsedMilliseconds > 200)
             {
                 var prevText = hasPreviousLocation ? " using previous location" : "";
-                Debug.WriteLine($"Red points found: {points.Count} in {sw.ElapsedMilliseconds}{prevText}.");
+                Debug.WriteLine($"Feather points found: {points.Count} in {sw.ElapsedMilliseconds}{prevText}.");
             }
 
             if (points.Count>1000)
             {
-                logger.Error("Error: Too much red in this image, adjust the configuration !");
+                logger.Error("Error: Too much of the feather colour in this image, please adjust the colour configuration !");
                 points.Clear();
             }
 
@@ -106,7 +106,7 @@ namespace FishingFun
             if (isMatch)
             {
                 points.Add(new Score { point = new Point(x, y) });
-                this.bitmap.SetPixel(x, y, Color.Red);
+                this.bitmap.SetPixel(x, y, this.pixelClassifier.Mode == PixelClassifier.ClassifierMode.Blue ? Color.Blue : Color.Red);
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 
 namespace FishingFun
 {
@@ -11,7 +12,10 @@ namespace FishingFun
 
         private Bitmap ScreenCapture = new Bitmap(1, 1);
 
-        public int RedValue { get; set; }
+        public int FindColourValue { get; set; }
+
+        public string PrimaryColor = "Red";
+        public string SecondaryColor = "blue";
 
         public int ColourMultiplier
         {
@@ -40,11 +44,15 @@ namespace FishingFun
         public ColourConfiguration(IPixelClassifier pixelClassifier)
         {
             this.pixelClassifier = pixelClassifier;
-            RedValue = 100;
+            FindColourValue = 100;
 
             InitializeComponent();
 
             this.DataContext = this;
+
+            cmbColors.ItemsSource = typeof(System.Windows.Media.Colors).GetProperties().Where(p => new List<string> { "Red", "Blue" }.Contains(p.Name));
+            cmbColors.SelectedIndex = this.pixelClassifier.Mode==PixelClassifier.ClassifierMode.Blue?0: 1;
+            LootDelay.Value = WowProcess.LootDelay;
         }
 
         private void RenderColour(bool renderMatchedArea)
@@ -53,15 +61,26 @@ namespace FishingFun
 
             var points = new List<Point>();
 
-            for (var b = 0; b < 256; b++)
+            for (var i = 0; i < 256; i++)
             {
                 for (var g = 0; g < 256; g++)
                 {
-                    if (pixelClassifier.IsMatch((byte)this.RedValue, (byte)g, (byte)b))
+                    var r = (byte)this.FindColourValue;
+                    var b = (byte)i;
+
+                    if (this.pixelClassifier.Mode == PixelClassifier.ClassifierMode.Blue)
                     {
-                        points.Add(new Point(b, g));
+                        r = (byte)i;
+                        b = (byte)this.FindColourValue;
+
                     }
-                    bitmap.SetPixel(b, g, System.Drawing.Color.FromArgb(this.RedValue, g, b));
+
+                    if (pixelClassifier.IsMatch(r, (byte)g, b))
+                    {
+                        points.Add(new Point(i, g));
+                    }
+                    bitmap.SetPixel(i, g, Color.FromArgb(r, g, b));
+
                 }
             }
 
@@ -85,13 +104,13 @@ namespace FishingFun
                 Dispatch(() =>
                 {
                     Bitmap bmp = new Bitmap(ScreenCapture);
-                    MarkRedOnBitmap(bmp);
+                    MarkHighlightOnBitmap(bmp);
                     this.WowScreenshot.Source = bmp.ToBitmapImage();
                 });
             }
         }
 
-        private void MarkRedOnBitmap(Bitmap bmp)
+        private void MarkHighlightOnBitmap(Bitmap bmp)
         {
             for (int x = 0; x < bmp.Width; x++)
             {
@@ -100,7 +119,7 @@ namespace FishingFun
                     var pixel = bmp.GetPixel(x, y);
                     if (this.pixelClassifier.IsMatch(pixel.R, pixel.G, pixel.B))
                     {
-                        bmp.SetPixel(x, y, Color.Red);
+                        bmp.SetPixel(x, y, this.pixelClassifier.Mode == PixelClassifier.ClassifierMode.Blue ? Color.Blue : Color.Red);
                     }
                 }
             }
@@ -117,21 +136,32 @@ namespace FishingFun
                 }
             }
         }
-
-        private void Red_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        private void LootDelay_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelRed.Content = this.RedValue;
+            WowProcess.LootDelay = (int)this.LootDelay.Value;
+        }
+
+        private void FindColour_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+            this.LabelRed.Content = this.FindColourValue;
             RenderColour(false);
         }
 
         private void ColourMultiplier_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelColourMultiplier.Text = $"Red multiplied by {this.pixelClassifier.ColourMultiplier} must be greater than green and blue.";
+            UpdateColourText();
         }
 
         private void ColourClosenessMultiplier_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            this.LabelColourClosenessMultiplier.Text = $"How close Green and Blue need to be to each other: {this.pixelClassifier.ColourClosenessMultiplier}";
+            UpdateColourText();
+        }
+
+        public void UpdateColourText()
+        {
+            this.LabelColourMultiplier.Text = $"{PrimaryColor} multiplied by {this.pixelClassifier.ColourMultiplier} must be greater than green and {SecondaryColor}.";
+            this.LabelColourClosenessMultiplier.Text = $"How close green and {SecondaryColor} need to be to each other: {this.pixelClassifier.ColourClosenessMultiplier}";
+            this.ColourLabel.Content = PrimaryColor + ":";
         }
 
         private void Slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -149,6 +179,35 @@ namespace FishingFun
         {
             System.Windows.Application.Current?.Dispatcher.BeginInvoke((Action)(() => action()));
             System.Windows.Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(delegate { }));
+        }
+
+        private void cmbColors_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (cmbColors.SelectedItem != null)
+            {
+                var propertyInfo = cmbColors.SelectedItem as PropertyInfo;
+                var item = propertyInfo?.GetValue(null, null);
+                if (item != null)
+                {
+                    var selectedColor = (System.Windows.Media.Color)item;
+
+                    if (propertyInfo?.Name == "Red")
+                    {
+                        PrimaryColor = "Red";
+                        SecondaryColor = "blue";
+                        this.pixelClassifier.Mode = PixelClassifier.ClassifierMode.Red;
+                    }
+                    else
+                    {
+                        PrimaryColor = "Blue";
+                        SecondaryColor = "red";
+                        this.pixelClassifier.Mode = PixelClassifier.ClassifierMode.Blue;
+                    }
+
+                    UpdateColourText();
+                    RenderColour(true);
+                }
+            }
         }
     }
 }

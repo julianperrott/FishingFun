@@ -15,13 +15,31 @@ https://www.youtube.com/watch?v=T6reHXxA5f0
 
 [![Fishing Fun YouTube](https://img.youtube.com/vi/T6reHXxA5f0/0.jpg)](https://www.youtube.com/watch?v=T6reHXxA5f0)
 
-## Build
+# Getting it working
 
-* Requires: Dot net framework 4.7
-https://dotnet.microsoft.com/download/dotnet-framework
-* The bot: Compile the source and run it from visual studio.
+## 1. Download this repository
 
-## Bot Running Instructions
+Put the contents of the repo into a folder. e.g "C:\FishingFun". I am going to refer to this folder from now on, so just substitute your own folder path.
+
+## 2. Install Visual Studio
+
+You will need to install Visual Studio, get it here: https://visualstudio.microsoft.com/vs/ use Community 2019 or later.
+- Under 'Desktop & mobile' - Select .Net desktop development.
+- Here is a video which shows installation (note you don't need python) https://www.youtube.com/watch?v=1uBESL2S8Ik&ab_channel=JonJensen
+
+Requires: Dot net framework 4.7 https://dotnet.microsoft.com/download/dotnet-framework, this should automatically be installed with visual studio.
+
+## 3. Build and run the Bot
+
+Double click on the solution file to open it: "C:\FishingFun\source\FishingFun.sln", or open it from visual studio.
+
+Once loaded click the Start button, this should build and run the project FishingFun.UI. Alternatively use F5 or menu 'Debug -> Start Debugging'.
+
+Once it has built you can run it without visual studio by navigating with File Explorer to folder C:\FishingFun\Source\bin\Debug and run by double clicking on Chrome.exe
+
+If you want run a version without a GUI you need to set the startup project in visual studio to FishingFun.Console by right clicking on the project in the Solution Explorer and choosing 'Set as startup project', then build (F6). You should now have C:\FishingFun\Source\bin\Debug\powershell.exe which you can run outside of visual studio.
+
+## 4. Bot Running Instructions
 
 * Enable 'Autoloot' (Esc, Interface Options, Controls, Check Autoloot)
 * Turn off Click to move (Esc, Interface Options, Mouse, Uncheck Click to move)
@@ -34,6 +52,17 @@ https://dotnet.microsoft.com/download/dotnet-framework
 * Sometimes you may need to adjust the colour parameters for the bobber finder, such as during evening time or if there is a lot of red in the landscape.
 
 ----
+
+## Fishing in Lava
+
+To get the 'Fire Ammonite Angler' achievement you need to fish in Lava. Lava is red making it impossible to see the red feather, so you need to switch to the blue feather. On the main page click the orange configuration button, then change the 'Watch Feather' combo from Red to 'Blue'
+
+Use a macro like this on your fishing key:
+
+        /use Fire Ammonite Bait
+        /cast Fishing
+
+![Fishing in Lava](/post/img/lava.png)
 
 ## All about the bot
 
