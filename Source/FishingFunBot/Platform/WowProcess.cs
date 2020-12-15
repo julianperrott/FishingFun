@@ -24,7 +24,7 @@ namespace FishingFun
         public static bool IsWowClassic()
         {
             var wowProcess = Get();
-            return wowProcess != null ? wowProcess.ProcessName.ToLower().Contains("classic") : false; ;
+            return wowProcess != null ? wowProcess.ProcessName.ToLower().Contains("classic") : false;
         }
 
         //Get the wow-process, if success returns the process else null

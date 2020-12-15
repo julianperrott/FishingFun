@@ -15,6 +15,7 @@ namespace FishingFun
 
         private ConsoleKey castKey;
         private List<ConsoleKey> tenMinKey;
+        private List<ConsoleKey> thirtyMinKey;
         private IBobberFinder bobberFinder;
         private IBiteWatcher biteWatcher;
         private bool isEnabled;
@@ -23,12 +24,13 @@ namespace FishingFun
 
         public event EventHandler<FishingEvent> FishingEventHandler;
 
-        public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey, List<ConsoleKey> tenMinKey)
+        public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey, List<ConsoleKey> tenMinKey, List<ConsoleKey> thirtyMinKey)
         {
             this.bobberFinder = bobberFinder;
             this.biteWatcher = biteWatcher;
             this.castKey = castKey;
             this.tenMinKey = tenMinKey;
+            this.thirtyMinKey = thirtyMinKey;
 
             logger.Info("FishBot Created.");
 
@@ -117,6 +119,7 @@ namespace FishingFun
                 {
                     Loot(bobberPosition);
                     PressTenMinKeyIfDue();
+                    PressThirtyMinKeyIfDue();
                     return;
                 }
 
@@ -124,11 +127,11 @@ namespace FishingFun
             }
         }
 
-        private DateTime StartTime = DateTime.Now;
+        private DateTime TenKeyTimer = DateTime.Now;
 
         private void PressTenMinKeyIfDue()
         {
-            if ((DateTime.Now - StartTime).TotalMinutes > 10 && tenMinKey.Count > 0)
+            if ((DateTime.Now - TenKeyTimer).TotalMinutes > 10 && tenMinKey.Count > 0)
             {
                 DoTenMinuteKey();
             }
@@ -145,7 +148,7 @@ namespace FishingFun
         /// </summary>
         private void DoTenMinuteKey()
         {
-            StartTime = DateTime.Now;
+            TenKeyTimer = DateTime.Now;
 
             if (tenMinKey.Count == 0)
             {
@@ -157,6 +160,41 @@ namespace FishingFun
             foreach (var key in tenMinKey)
             {
                 logger.Info($"Ten Minute Key: Pressing key {key} to run a macro, delete junk fish or apply a lure etc.");
+                WowProcess.PressKey(key);
+            }
+        }
+        
+        private DateTime ThirtyKeyTimer = DateTime.Now;
+
+        private void PressThirtyMinKeyIfDue()
+        {
+            if ((DateTime.Now - ThirtyKeyTimer).TotalMinutes > 30 && thirtyMinKey.Count > 0)
+            {
+                DoThirtyMinuteKey();
+            }
+        }
+
+        /// <summary>
+        /// Thirty minute key can do anything you want e.g.
+        /// Macro to apply a lure: 
+        /// /use Bright Baubles
+        /// /use 16
+        /// 
+        /// Or a macro to delete junk:
+        /// /run for b=0,4 do for s=1,GetContainerNumSlots(b) do local n=GetContainerItemLink(b,s) if n and (strfind(n,"Raw R") or strfind(n,"Raw Spot") or strfind(n,"Raw Glo") or strfind(n,"roup")) then PickupContainerItem(b,s) DeleteCursorItem() end end end
+        /// </summary>
+        private void DoThirtyMinuteKey()
+        {
+            ThirtyKeyTimer = DateTime.Now;
+
+            if (thirtyMinKey.Count == 0)
+            {
+                logger.Info($"Thirty Minute Key:  No keys defined in tenMinKey, so nothing to do (Define in call to FishingBot constructor).");
+            }
+
+            foreach (var key in thirtyMinKey)
+            {
+                logger.Info($"Thirty Minute Key: Pressing key {key} to run a macro, delete junk fish or apply a lure etc.");
                 WowProcess.PressKey(key);
             }
         }
