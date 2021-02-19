@@ -8,7 +8,7 @@ namespace FishingFun
 {
     public class PositionBiteWatcher : IBiteWatcher
     {
-        private static ILog logger = LogManager.GetLogger("Fishbot");
+        private static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private List<int> yPositions = new List<int>();
         private int strikeValue;

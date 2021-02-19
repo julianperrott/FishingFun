@@ -11,7 +11,7 @@ namespace FishingFun
 {
     public class FishingBot
     {
-        public static ILog logger = LogManager.GetLogger("Fishbot");
+        public static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private ConsoleKey castKey;
         private List<ConsoleKey> tenMinKey;
@@ -182,7 +182,7 @@ namespace FishingFun
 
         public static void FlushBuffers()
         {
-            ILog log = LogManager.GetLogger("Fishbot");
+            ILog log = LogManager.GetLogger(typeof(FishingBot));
             var logger = log.Logger as Logger;
             if (logger != null)
             {

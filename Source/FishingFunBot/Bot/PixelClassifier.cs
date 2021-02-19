@@ -5,7 +5,7 @@ namespace FishingFun
 {
     public partial class PixelClassifier : IPixelClassifier
     {
-        private static ILog logger = LogManager.GetLogger("Fishbot");
+        private static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         public double ColourMultiplier { get; set; } = 0.5;
         public double ColourClosenessMultiplier { get; set; } = 2.0;
@@ -28,13 +28,13 @@ namespace FishingFun
         {
             if (isWowClasic)
             {
-                LogManager.GetLogger("Fishbot").Info("Wow Classic configuration");
+                LogManager.GetLogger(typeof(FishingBot)).Info("Wow Classic configuration");
                 this.ColourMultiplier = 1;
                 this.ColourClosenessMultiplier = 1;
             }
             else
             {
-                LogManager.GetLogger("Fishbot").Info("Wow Standard configuration");
+                LogManager.GetLogger(typeof(FishingBot)).Info("Wow Standard configuration");
             }
         }
 

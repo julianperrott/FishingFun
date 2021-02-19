@@ -12,7 +12,7 @@ namespace FishingFun
 {
     public static class WowProcess
     {
-        public static ILog logger = LogManager.GetLogger("Fishbot");
+        public static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private const UInt32 WM_KEYDOWN = 0x0100;
         private const UInt32 WM_KEYUP = 0x0101;

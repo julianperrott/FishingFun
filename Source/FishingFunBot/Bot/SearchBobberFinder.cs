@@ -12,7 +12,7 @@ namespace FishingFun
     {
         private readonly IPixelClassifier pixelClassifier;
 
-        private static ILog logger = LogManager.GetLogger("Fishbot");
+        private static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private Point previousLocation;
 

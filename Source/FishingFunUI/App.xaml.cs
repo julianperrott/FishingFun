@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using log4net.Repository;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 
 namespace FishingFun
@@ -7,7 +9,8 @@ namespace FishingFun
     {
         public App()
         {
-            log4net.Config.XmlConfigurator.Configure(new FileStream("log4net.config", FileMode.Open));
+            ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
+            log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
         }
     }
 }

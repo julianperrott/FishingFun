@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using log4net.Repository;
+using System.Reflection;
 
 namespace Powershell
 {
@@ -11,7 +13,8 @@ namespace Powershell
     {
         private static void Main(string[] args)
         {
-            log4net.Config.XmlConfigurator.Configure(new FileStream("log4net.config", FileMode.Open));
+            ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
+            log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
             int strikeValue = 7;
 
@@ -28,7 +31,7 @@ namespace Powershell
             var biteWatcher = new PositionBiteWatcher(strikeValue);
 
             var bot = new FishingBot(bobberFinder, biteWatcher, ConsoleKey.D4, new List<ConsoleKey> { ConsoleKey.D5 });
-            bot.FishingEventHandler += (b, e) => LogManager.GetLogger("Fishbot").Info(e);
+            bot.FishingEventHandler += (b, e) => LogManager.GetLogger(typeof(FishingBot)).Info(e);
 
             WowProcess.PressKey(ConsoleKey.Spacebar);
             System.Threading.Thread.Sleep(1500);
