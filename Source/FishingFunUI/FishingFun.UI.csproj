@@ -25,7 +25,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <nullable>enable</nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -53,29 +53,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\FishingFun.png" />
+    <Resource Include="Resources\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\play.png" />
-    <Resource Include="Resources\stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\play_disabled.png" />
-    <Resource Include="Resources\stop_disabled.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\FishingFunLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\fishingfun.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Button.png" />
-  </ItemGroup>
-  <ItemGroup>
+	<ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -91,11 +71,10 @@
     <ProjectReference Include="..\FishingFunBot\FishingFun.Bot.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LiveCharts" Version="0.9.7" />
-    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="MaterialDesignColors" Version="1.2.0-ci1418" />
-    <PackageReference Include="MaterialDesignThemes" Version="2.6.0-ci1435" />
+    <PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.7" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="MaterialDesignColors" Version="2.0.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>

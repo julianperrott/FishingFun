@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.IO;
 using log4net.Repository;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Powershell
 {
     public class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             ILoggerRepository repository = log4net.LogManager.GetRepository(Assembly.GetCallingAssembly());
             log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
@@ -33,10 +34,10 @@ namespace Powershell
             var bot = new FishingBot(bobberFinder, biteWatcher, ConsoleKey.D4, new List<ConsoleKey> { ConsoleKey.D5 });
             bot.FishingEventHandler += (b, e) => LogManager.GetLogger(typeof(FishingBot)).Info(e);
 
-            WowProcess.PressKey(ConsoleKey.Spacebar);
-            System.Threading.Thread.Sleep(1500);
+            await WowProcess.PressKey(ConsoleKey.Spacebar);
+            await Task.Delay(1500);
 
-            bot.Start();
+            await bot.Start(default);
         }
     }
 }
