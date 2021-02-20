@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -31,32 +32,33 @@ namespace FishingFun
             this.previousLocation = Point.Empty;
         }
 
-        public async Task<Point> Find()
+        public async Task<Point> FindAsync(CancellationToken cancellationToken)
         {
-            return await Task.Run(() =>
+            return await Task.Run(() => Find(cancellationToken));
+        }
+
+        public Point Find(CancellationToken cancellationToken) {
+            var bitmap = WowScreen.GetBitmap();
+
+            Score? best = Score.ScorePoints(FindRedPoints(bitmap));
+
+            if (previousLocation != Point.Empty && best == null)
             {
-                var bitmap = WowScreen.GetBitmap();
-
-                Score? best = Score.ScorePoints(FindRedPoints(bitmap));
-
-                if (previousLocation != Point.Empty && best == null)
-                {
-                    previousLocation = Point.Empty;
-                    best = Score.ScorePoints(FindRedPoints(bitmap));
-                }
-
                 previousLocation = Point.Empty;
-                if (best != null)
-                {
-                    previousLocation = best.point;
-                }
+                best = Score.ScorePoints(FindRedPoints(bitmap));
+            }
 
-                BitmapEvent?.Invoke(this, new BobberBitmapEvent { Point = new Point(previousLocation.X, previousLocation.Y), Bitmap = bitmap });
+            previousLocation = Point.Empty;
+            if (best != null)
+            {
+                previousLocation = best.point;
+            }
 
-                bitmap.Dispose();
+            BitmapEvent?.Invoke(this, new BobberBitmapEvent { Point = new Point(previousLocation.X, previousLocation.Y), Bitmap = bitmap });
 
-                return previousLocation == Point.Empty ? Point.Empty : WowScreen.GetScreenPositionFromBitmapPostion(previousLocation);
-            });
+            bitmap.Dispose();
+
+            return previousLocation == Point.Empty ? Point.Empty : WowScreen.GetScreenPositionFromBitmapPostion(previousLocation);
         }
 
         private List<Score> FindRedPoints(Bitmap bitmap)

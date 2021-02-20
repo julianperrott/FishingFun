@@ -37,13 +37,15 @@ namespace FishingFun
         public async Task Start(CancellationToken ct)
         {
             biteWatcher.FishingEventHandler = (e) => FishingEventHandler?.Invoke(this, e);
-            if (cts is not null && !ct.IsCancellationRequested)
+            if (cts is not null && !cts.Token.IsCancellationRequested)
                 cts.Cancel();
 
-            cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            var newCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            cts = newCts;
             await DoTenMinuteKey();
 
-            while (cts is not null && !cts.Token.IsCancellationRequested)
+            
+            while (!newCts.Token.IsCancellationRequested)
             {
                 try
                 {
@@ -51,17 +53,22 @@ namespace FishingFun
 
                     await PressTenMinKeyIfDue();
 
+                    if (newCts.Token.IsCancellationRequested) break;
                     FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
                     await WowProcess.PressKey(castKey);
 
-                    await Watch(2000);
+                    if (newCts.Token.IsCancellationRequested) break;
+                    await Watch(2000, newCts.Token);
 
-                    await WaitForBite(cts.Token);
+                    if (newCts.Token.IsCancellationRequested) break;
+                    await WaitForBite(newCts.Token);
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e.ToString());
-                    await Sleep(2000);
+                    logger.Error(e.ToString()); 
+                    if (newCts.Token.IsCancellationRequested) break;
+
+                    await Sleep(2000, newCts.Token);
                 }
             }
 
@@ -73,14 +80,14 @@ namespace FishingFun
             this.castKey = castKey;
         }
 
-        private async Task Watch(int milliseconds)
+        private async Task Watch(int milliseconds, CancellationToken cancellationToken)
         {
             bobberFinder.Reset();
             stopwatch.Reset();
             stopwatch.Start();
-            while (stopwatch.ElapsedMilliseconds < milliseconds)
+            while (stopwatch.ElapsedMilliseconds < milliseconds && !cancellationToken.IsCancellationRequested)
             {
-                await bobberFinder.Find();
+                await bobberFinder.FindAsync(cancellationToken);
             }
             stopwatch.Stop();
         }
@@ -99,11 +106,9 @@ namespace FishingFun
         {
             bobberFinder.Reset();
 
-            var bobberPosition = await FindBobber();
-            if (bobberPosition == Point.Empty)
-            {
+            var bobberPosition = await FindBobber(cancellationToken);
+            if (bobberPosition == Point.Empty || cancellationToken.IsCancellationRequested)
                 return;
-            }
 
             this.biteWatcher.Reset(bobberPosition);
 
@@ -112,14 +117,15 @@ namespace FishingFun
             var timedTask = new TimedAction((a) => { logger.Info("Fishing timed out!"); }, 25 * 1000, 25);
 
             // Wait for the bobber to move
-            while (cts is not null && !cts.Token.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var currentBobberPosition = await FindBobber();
-                if (currentBobberPosition == Point.Empty || currentBobberPosition.X == 0) { return; }
+                var currentBobberPosition = await FindBobber(cancellationToken);
+                if (currentBobberPosition == Point.Empty || currentBobberPosition.X == 0 || cancellationToken.IsCancellationRequested)
+                    return;
 
                 if (this.biteWatcher.IsBite(currentBobberPosition))
                 {
-                    await Loot(bobberPosition);
+                    await Loot(bobberPosition); 
                     await PressTenMinKeyIfDue();
                     return;
                 }
@@ -171,13 +177,13 @@ namespace FishingFun
             await WowProcess.RightClickMouse(logger, bobberPosition);
         }
 
-        public static async Task Sleep(int ms)
+        public static async Task Sleep(int ms, CancellationToken cancellationToken)
         {
             ms+=random.Next(0, 225);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (sw.Elapsed.TotalMilliseconds < ms)
+            while (sw.Elapsed.TotalMilliseconds < ms && !cancellationToken.IsCancellationRequested)
             {
                 FlushBuffers();
                 await Task.Delay(100);
@@ -201,15 +207,16 @@ namespace FishingFun
             }
         }
 
-        private async Task<Point> FindBobber()
+        private async Task<Point> FindBobber(CancellationToken cancellationToken)
         {
             var timer = new TimedAction((a) => { logger.Info("Waited seconds for target: " + a.ElapsedSecs); }, 1000, 5);
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var target = await this.bobberFinder.Find();
-                if (target != Point.Empty || !timer.ExecuteIfDue()) { return target; }
+                var target = await this.bobberFinder.FindAsync(cancellationToken);
+                if (target != Point.Empty || !timer.ExecuteIfDue() ) { return target; }
             }
+            return Point.Empty;
         }
     }
 }
