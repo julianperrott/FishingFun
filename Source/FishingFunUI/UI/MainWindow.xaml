@@ -108,7 +108,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <materialDesign:ColorZone Mode="Accent" Padding="6" Background="LightBlue">
+                        <materialDesign:ColorZone Mode="Light" Padding="6" Background="LightBlue">
 
                             <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
@@ -137,7 +137,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <materialDesign:ColorZone Mode="Accent" Padding="6" Name="LogHeader" Background="LightBlue">
+                        <materialDesign:ColorZone Mode="Light" Padding="6" Name="LogHeader" Background="LightBlue">
 
                             <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">

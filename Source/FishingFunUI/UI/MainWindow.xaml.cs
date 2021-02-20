@@ -7,6 +7,8 @@ namespace FishingFun
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Timers;
     using System.Windows;
     using System.Windows.Controls;
@@ -24,8 +26,8 @@ namespace FishingFun
         private FishingBot? bot;
         private int strikeValue = 7; // this is the depth the bobber must go for the bite to be detected
         private bool setImageBackgroundColour = true;
-        private Timer WindowSizeChangedTimer;
-        private System.Threading.Thread? botThread;
+        private System.Timers.Timer WindowSizeChangedTimer;
+        private Task? botThread;
 
         public MainWindow()
         {
@@ -47,12 +49,19 @@ namespace FishingFun
 
             this.biteWatcher = new PositionBiteWatcher(strikeValue);
 
-            this.WindowSizeChangedTimer = new Timer { AutoReset = false, Interval = 100 };
+            this.WindowSizeChangedTimer = new System.Timers.Timer { AutoReset = false, Interval = 100 };
             this.WindowSizeChangedTimer.Elapsed += SizeChangedTimer_Elapsed;
             this.CardGrid.SizeChanged += MainWindow_SizeChanged;
-            this.Closing += (s, e) => botThread?.Abort();
+            this.Closing += (s, e) =>
+            {
+                if (cts?.IsCancellationRequested == false)
+                {
+                    cts.Cancel();
+                    botThread?.GetAwaiter().GetResult();
+                }
+            };
 
-            this.KeyChooser.CastKeyChanged += (s, e) =>
+            this.KeyChooser.CastKeyChanged += () =>
             {
                 this.Settings.Focus();
                 this.bot?.SetCastKey(this.KeyChooser.CastKey);
@@ -88,8 +97,9 @@ namespace FishingFun
 
         private void CastKey_Click(object sender, RoutedEventArgs e) => this.KeyChooser.Focus();
 
-        private void FishingEventHandler(object sender, FishingEvent e)
+        private void FishingEventHandler(object? sender, FishingEvent? e)
         {
+            if (e is null) return;
             Dispatch(() =>
             {
                 switch (e.Action)
@@ -144,36 +154,38 @@ namespace FishingFun
             });
         }
 
-        private void Play_Click(object sender, RoutedEventArgs e)
+        private CancellationTokenSource? cts;
+        private async void  Play_Click(object sender, RoutedEventArgs e)
         {
             if (bot == null)
             {
-                WowProcess.PressKey(ConsoleKey.Spacebar);
-                System.Threading.Thread.Sleep(1500);
+                await WowProcess.PressKey(ConsoleKey.Spacebar);
+                await Task.Delay(1500);
 
                 SetButtonStates(false);
-                botThread = new System.Threading.Thread(new System.Threading.ThreadStart(this.BotThread));
-                botThread.Start();
+                cts ??= new CancellationTokenSource();
+                botThread = Task.Run(() => BotThread(cts.Token));
 
                 // Hide cards after 10 minutes
-                var timer = new Timer { Interval = 1000 * 60 * 10, AutoReset = false };
+                var timer = new System.Timers.Timer { Interval = 1000 * 60 * 10, AutoReset = false };
                 timer.Elapsed += (s, ev) => this.Dispatch(() => this.LogFlipper.IsFlipped = this.GraphFlipper.IsFlipped = true);
                 timer.Start();
             }
         }
 
-        public void BotThread()
+        public async void BotThread(CancellationToken cancellationToken)
         {
             bot = new FishingBot(bobberFinder, this.biteWatcher, KeyChooser.CastKey, new List<ConsoleKey> { ConsoleKey.D5, ConsoleKey.D6 });
             bot.FishingEventHandler += FishingEventHandler;
-            bot.Start();
+            await bot.Start(cancellationToken);
 
             bot = null;
             SetButtonStates(true);
         }
 
-        private void ImageProvider_BitmapEvent(object sender, BobberBitmapEvent e)
+        private void ImageProvider_BitmapEvent(object? sender, BobberBitmapEvent? e)
         {
+            if (e is null) return;
             Dispatch(() =>
             {
                 SetBackgroundImageColour(e);

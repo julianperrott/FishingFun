@@ -1,10 +1,11 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 
 namespace FishingFun
 {
     public interface IBobberFinder
     {
-        Point Find();
+        Task<Point> Find();
 
         void Reset();
     }
