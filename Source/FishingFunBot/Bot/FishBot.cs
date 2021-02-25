@@ -6,22 +6,22 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FishingFun
 {
     public class FishingBot
     {
-        public static ILog logger = LogManager.GetLogger("Fishbot");
+        public static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private ConsoleKey castKey;
         private List<ConsoleKey> tenMinKey;
         private IBobberFinder bobberFinder;
         private IBiteWatcher biteWatcher;
-        private bool isEnabled;
         private Stopwatch stopwatch = new Stopwatch();
         private static Random random = new Random();
 
-        public event EventHandler<FishingEvent> FishingEventHandler;
+        public event EventHandler<FishingEvent>? FishingEventHandler;
 
         public FishingBot(IBobberFinder bobberFinder, IBiteWatcher biteWatcher, ConsoleKey castKey, List<ConsoleKey> tenMinKey)
         {
@@ -31,37 +31,44 @@ namespace FishingFun
             this.tenMinKey = tenMinKey;
 
             logger.Info("FishBot Created.");
-
-            FishingEventHandler += (s, e) => { };
         }
 
-        public void Start()
+        private CancellationTokenSource? cts;
+        public async Task Start(CancellationToken ct)
         {
             biteWatcher.FishingEventHandler = (e) => FishingEventHandler?.Invoke(this, e);
+            if (cts is not null && !cts.Token.IsCancellationRequested)
+                cts.Cancel();
 
-            isEnabled = true;
+            var newCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            cts = newCts;
+            await DoTenMinuteKey();
 
-            DoTenMinuteKey();
-
-            while (isEnabled)
+            
+            while (!newCts.Token.IsCancellationRequested)
             {
                 try
                 {
                     logger.Info($"Pressing key {castKey} to Cast.");
 
-                    PressTenMinKeyIfDue();
+                    await PressTenMinKeyIfDue();
 
+                    if (newCts.Token.IsCancellationRequested) break;
                     FishingEventHandler?.Invoke(this, new FishingEvent { Action = FishingAction.Cast });
-                    WowProcess.PressKey(castKey);
+                    await WowProcess.PressKey(castKey);
 
-                    Watch(2000);
+                    if (newCts.Token.IsCancellationRequested) break;
+                    await Watch(2000, newCts.Token);
 
-                    WaitForBite();
+                    if (newCts.Token.IsCancellationRequested) break;
+                    await WaitForBite(newCts.Token);
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e.ToString());
-                    Sleep(2000);
+                    logger.Error(e.ToString()); 
+                    if (newCts.Token.IsCancellationRequested) break;
+
+                    await Sleep(2000, newCts.Token);
                 }
             }
 
@@ -73,33 +80,35 @@ namespace FishingFun
             this.castKey = castKey;
         }
 
-        private void Watch(int milliseconds)
+        private async Task Watch(int milliseconds, CancellationToken cancellationToken)
         {
             bobberFinder.Reset();
             stopwatch.Reset();
             stopwatch.Start();
-            while (stopwatch.ElapsedMilliseconds < milliseconds)
+            while (stopwatch.ElapsedMilliseconds < milliseconds && !cancellationToken.IsCancellationRequested)
             {
-                bobberFinder.Find();
+                await bobberFinder.FindAsync(cancellationToken);
             }
             stopwatch.Stop();
         }
 
         public void Stop()
         {
-            isEnabled = false;
-            logger.Error("Bot is Stopping...");
+            if(cts is not null && !cts.Token.IsCancellationRequested)
+            {
+                cts.Cancel();
+                cts = null;
+                logger.Error("Bot is Stopping...");
+            };
         }
 
-        private void WaitForBite()
+        private async Task WaitForBite(CancellationToken cancellationToken)
         {
             bobberFinder.Reset();
 
-            var bobberPosition = FindBobber();
-            if (bobberPosition == Point.Empty)
-            {
+            var bobberPosition = await FindBobber(cancellationToken);
+            if (bobberPosition == Point.Empty || cancellationToken.IsCancellationRequested)
                 return;
-            }
 
             this.biteWatcher.Reset(bobberPosition);
 
@@ -108,15 +117,16 @@ namespace FishingFun
             var timedTask = new TimedAction((a) => { logger.Info("Fishing timed out!"); }, 25 * 1000, 25);
 
             // Wait for the bobber to move
-            while (isEnabled)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var currentBobberPosition = FindBobber();
-                if (currentBobberPosition == Point.Empty || currentBobberPosition.X == 0) { return; }
+                var currentBobberPosition = await FindBobber(cancellationToken);
+                if (currentBobberPosition == Point.Empty || currentBobberPosition.X == 0 || cancellationToken.IsCancellationRequested)
+                    return;
 
                 if (this.biteWatcher.IsBite(currentBobberPosition))
                 {
-                    Loot(bobberPosition);
-                    PressTenMinKeyIfDue();
+                    await Loot(bobberPosition); 
+                    await PressTenMinKeyIfDue();
                     return;
                 }
 
@@ -126,11 +136,11 @@ namespace FishingFun
 
         private DateTime StartTime = DateTime.Now;
 
-        private void PressTenMinKeyIfDue()
+        private async Task PressTenMinKeyIfDue()
         {
             if ((DateTime.Now - StartTime).TotalMinutes > 10 && tenMinKey.Count > 0)
             {
-                DoTenMinuteKey();
+                await DoTenMinuteKey();
             }
         }
 
@@ -143,7 +153,7 @@ namespace FishingFun
         /// Or a macro to delete junk:
         /// /run for b=0,4 do for s=1,GetContainerNumSlots(b) do local n=GetContainerItemLink(b,s) if n and (strfind(n,"Raw R") or strfind(n,"Raw Spot") or strfind(n,"Raw Glo") or strfind(n,"roup")) then PickupContainerItem(b,s) DeleteCursorItem() end end end
         /// </summary>
-        private void DoTenMinuteKey()
+        private async Task DoTenMinuteKey()
         {
             StartTime = DateTime.Now;
 
@@ -157,32 +167,32 @@ namespace FishingFun
             foreach (var key in tenMinKey)
             {
                 logger.Info($"Ten Minute Key: Pressing key {key} to run a macro, delete junk fish or apply a lure etc.");
-                WowProcess.PressKey(key);
+                await WowProcess.PressKey(key);
             }
         }
 
-        private void Loot(Point bobberPosition)
+        private async Task Loot(Point bobberPosition)
         {
             logger.Info($"Right clicking mouse to Loot.");
-            WowProcess.RightClickMouse(logger, bobberPosition);
+            await WowProcess.RightClickMouse(logger, bobberPosition);
         }
 
-        public static void Sleep(int ms)
+        public static async Task Sleep(int ms, CancellationToken cancellationToken)
         {
             ms+=random.Next(0, 225);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (sw.Elapsed.TotalMilliseconds < ms)
+            while (sw.Elapsed.TotalMilliseconds < ms && !cancellationToken.IsCancellationRequested)
             {
                 FlushBuffers();
-                Thread.Sleep(100);
+                await Task.Delay(100);
             }
         }
 
         public static void FlushBuffers()
         {
-            ILog log = LogManager.GetLogger("Fishbot");
+            ILog log = LogManager.GetLogger(typeof(FishingBot));
             var logger = log.Logger as Logger;
             if (logger != null)
             {
@@ -197,15 +207,16 @@ namespace FishingFun
             }
         }
 
-        private Point FindBobber()
+        private async Task<Point> FindBobber(CancellationToken cancellationToken)
         {
             var timer = new TimedAction((a) => { logger.Info("Waited seconds for target: " + a.ElapsedSecs); }, 1000, 5);
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var target = this.bobberFinder.Find();
-                if (target != Point.Empty || !timer.ExecuteIfDue()) { return target; }
+                var target = await this.bobberFinder.FindAsync(cancellationToken);
+                if (target != Point.Empty || !timer.ExecuteIfDue() ) { return target; }
             }
+            return Point.Empty;
         }
     }
 }

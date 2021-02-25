@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FishingFun
 {
@@ -16,7 +18,12 @@ namespace FishingFun
 
         public event EventHandler<BobberBitmapEvent> BitmapEvent;
 
-        public Point Find()
+        public async Task<Point> FindAsync(CancellationToken cancellationToken)
+        {
+            return await Task.Run(() => Find(cancellationToken));
+        }
+
+        private Point Find(CancellationToken cancellationToken)
         {
             this.bmp = WowScreen.GetBitmap();
 
@@ -38,8 +45,12 @@ namespace FishingFun
 
             for (int i = widthLower; i < widthHigher; i++)
             {
+                if (cancellationToken.IsCancellationRequested) break;
+
                 for (int j = heightLower; j < heightHigher; j++)
                 {
+                    if (cancellationToken.IsCancellationRequested) break;
+
                     pos.X = i;
                     pos.Y = j;
                     var colorAt = WowScreen.GetColorAt(pos, bmp);

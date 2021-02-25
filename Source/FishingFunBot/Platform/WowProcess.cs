@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 #nullable enable
 
@@ -12,7 +13,7 @@ namespace FishingFun
 {
     public static class WowProcess
     {
-        public static ILog logger = LogManager.GetLogger("Fishbot");
+        public static ILog logger = LogManager.GetLogger(typeof(FishingBot));
 
         private const UInt32 WM_KEYDOWN = 0x0100;
         private const UInt32 WM_KEYUP = 0x0101;
@@ -78,10 +79,10 @@ namespace FishingFun
             KeyUp(lastKey);
         }
 
-        public static void PressKey(ConsoleKey key)
+        public static async Task PressKey(ConsoleKey key)
         {
             KeyDown(key);
-            Thread.Sleep(50 + random.Next(0, 75));
+            await Task.Delay(50 + random.Next(0, 75));
             KeyUp(key);
         }
 
@@ -98,13 +99,13 @@ namespace FishingFun
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int x, int y);
 
-        public static void RightClickMouse(ILog logger, System.Drawing.Point position)
+        public static async Task RightClickMouse(ILog logger, System.Drawing.Point position)
         {
             //RightClickMouse_Original(logger, position);
-            RightClickMouse_LiamCooper(logger, position);
+            await RightClickMouse_LiamCooper(logger, position);
         }
 
-        public static void RightClickMouse_Original(ILog logger, System.Drawing.Point position)
+        public static async Task RightClickMouse_Original(ILog logger, System.Drawing.Point position)
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
@@ -115,19 +116,19 @@ namespace FishingFun
                 for (int i = 20; i > 0; i--)
                 {
                     SetCursorPos(position.X + i, position.Y + i);
-                    Thread.Sleep(1);
+                    await Task.Delay(1);
                 }
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
 
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
-                Thread.Sleep(30 + random.Next(0, 47));
+                await Task.Delay(30 + random.Next(0, 47));
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
 
-                RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
+                await RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
             }
         }
 
-        public static void RightClickMouse()
+        public static async Task RightClickMouse()
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
@@ -135,12 +136,13 @@ namespace FishingFun
             {
                 var oldPosition = System.Windows.Forms.Cursor.Position;
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
-                Thread.Sleep(30 + random.Next(0, 47));
+
+                await Task.Delay(30 + random.Next(0, 47));
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
             }
         }
 
-        public static void LeftClickMouse()
+        public static async Task LeftClickMouse()
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
@@ -148,12 +150,12 @@ namespace FishingFun
             {
                 var oldPosition = System.Windows.Forms.Cursor.Position;
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONDOWN, Keys.VK_RMB, 0);
-                Thread.Sleep(30 + random.Next(0, 47));
+                await Task.Delay(30 + random.Next(0, 47));
                 PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONUP, Keys.VK_RMB, 0);
             }
         }
 
-        public static void RightClickMouse_LiamCooper(ILog logger, System.Drawing.Point position)
+        public static async Task RightClickMouse_LiamCooper(ILog logger, System.Drawing.Point position)
         {
             var activeProcess = GetActiveProcess();
             var wowProcess = WowProcess.Get();
@@ -162,18 +164,18 @@ namespace FishingFun
                 mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);
                 var oldPosition = System.Windows.Forms.Cursor.Position;
 
-                Thread.Sleep(200);
+                await Task.Delay(200);
                 System.Windows.Forms.Cursor.Position = position;
-                Thread.Sleep(LootDelay);
+                await Task.Delay(LootDelay);
                 mouse_event((int)MouseEventFlags.RightDown, position.X, position.Y, 0, 0);
-                Thread.Sleep(30 + random.Next(0, 47));
+                await Task.Delay(30 + random.Next(0, 47));
                 mouse_event((int)MouseEventFlags.RightUp, position.X, position.Y, 0, 0);
-                RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
-                Thread.Sleep(LootDelay / 2);
+                await RefocusOnOldScreen(logger, activeProcess, wowProcess, oldPosition);
+                await Task.Delay(LootDelay / 2);
             }
         }
 
-        private static void RefocusOnOldScreen(ILog logger, Process activeProcess, Process wowProcess, System.Drawing.Point oldPosition)
+        private static async Task RefocusOnOldScreen(ILog logger, Process activeProcess, Process wowProcess, System.Drawing.Point oldPosition)
         {
             try
             {
@@ -181,11 +183,11 @@ namespace FishingFun
                 {
                     // get focus back on this screen
                     PostMessage(activeProcess.MainWindowHandle, Keys.WM_RBUTTONDOWN, Keys.VK_RMB, 0);
-                    Thread.Sleep(30);
+                    await Task.Delay(30);
                     PostMessage(activeProcess.MainWindowHandle, Keys.WM_RBUTTONUP, Keys.VK_RMB, 0);
 
                     KeyDown(ConsoleKey.Escape);
-                    Thread.Sleep(30);
+                    await Task.Delay(30);
                     KeyUp(ConsoleKey.Escape);
 
                     System.Windows.Forms.Cursor.Position = oldPosition;

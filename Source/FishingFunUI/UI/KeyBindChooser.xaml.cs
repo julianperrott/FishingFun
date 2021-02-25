@@ -11,11 +11,11 @@ namespace FishingFun
 
         private static string Filename = "keybind.txt";
 
-        public EventHandler CastKeyChanged;
+        public event Action CastKeyChanged;
 
         public KeyBindChooser()
         {
-            CastKeyChanged += (s, e) => { };
+            CastKeyChanged += () => { };
 
             InitializeComponent();
             ReadConfiguration();
@@ -65,7 +65,7 @@ namespace FishingFun
                 {
                     this.CastKey = ck;
                     WriteConfiguration();
-                    CastKeyChanged?.Invoke(this, null);
+                    CastKeyChanged?.Invoke();
                     return;
                 }
             }
