@@ -3,6 +3,8 @@
 
 In World of Warcraft, Fishing is a time consuming task which is simple and so lends itself to automation very well. There are many fishing bots out there. This article describes the bot that I wrote for fun and the problems I solved to make it work.
 
+* [Download compiled version from ToolsLib](https://toolslib.net/downloads/viewdownload/2027-fishing-fun-a-world-of-warcraft-bot/)
+
 ### Why Fish ?
 
 Fishing is a way to catch fish which can be used to cook food, which is used to heal or increase the stats of your character. You can also gain achievements through fishing. 
