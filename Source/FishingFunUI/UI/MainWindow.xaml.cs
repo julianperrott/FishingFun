@@ -26,6 +26,7 @@ namespace FishingFun
         private bool setImageBackgroundColour = true;
         private Timer WindowSizeChangedTimer;
         private System.Threading.Thread? botThread;
+        private int MacroTimer = 10;
 
         public MainWindow()
         {
@@ -57,6 +58,18 @@ namespace FishingFun
                 this.Settings.Focus();
                 this.bot?.SetCastKey(this.KeyChooser.CastKey);
             };
+
+            this.Macro1KeyChooser.CastKeyChanged += (s, e) =>
+            {
+                this.Settings.Focus();
+                this.bot?.SetMacro1Key(this.Macro1KeyChooser.CastKey);
+            };
+
+            this.Macro2KeyChooser.CastKeyChanged += (s, e) =>
+            {
+                this.Settings.Focus();
+                this.bot?.SetMacro2Key(this.Macro2KeyChooser.CastKey);
+            };
         }
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -87,6 +100,10 @@ namespace FishingFun
         private void Settings_Click(object sender, RoutedEventArgs e) => new ColourConfiguration(this.pixelClassifier).Show();
 
         private void CastKey_Click(object sender, RoutedEventArgs e) => this.KeyChooser.Focus();
+
+        private void Macro1Key_Click(object sender, RoutedEventArgs e) => this.Macro1KeyChooser.Focus();
+
+        private void Macro2Key_Click(object sender, RoutedEventArgs e) => this.Macro2KeyChooser.Focus();
 
         private void FishingEventHandler(object sender, FishingEvent e)
         {
@@ -164,7 +181,7 @@ namespace FishingFun
 
         public void BotThread()
         {
-            bot = new FishingBot(bobberFinder, this.biteWatcher, KeyChooser.CastKey, new List<ConsoleKey> { ConsoleKey.D5, ConsoleKey.D6 });
+            bot = new FishingBot(bobberFinder, this.biteWatcher, KeyChooser.CastKey, new List<ConsoleKey> { Macro1KeyChooser.CastKey, Macro2KeyChooser.CastKey }, MacroTimer);
             bot.FishingEventHandler += FishingEventHandler;
             bot.Start();
 
@@ -197,6 +214,15 @@ namespace FishingFun
         {
             Application.Current?.Dispatcher.BeginInvoke((Action)(() => action()));
             Application.Current?.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(delegate { }));
+        }
+
+        private void MacroTimer_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (int.TryParse(this.MacroTimerText.Text, out Int32 result))
+            {
+                this.MacroTimer = result;
+                this.bot?.SetMacroTimer(this.MacroTimer);
+            }
         }
     }
 }
